@@ -30,12 +30,13 @@ namespace HireMeNowWebApi.Data.Repositories
 
         public void DeleteById(Guid id)
         {
-            Job item = jobs.FirstOrDefault(i => i.Id == id);
+            var item = _context.Jobs.Find(id); 
             if (item != null)
             {
-                jobs.Remove(item);
-            }
-        }
+				_context.Jobs.Remove(item);
+				_context.SaveChanges();
+			}
+		}
 
         public List<Job> getByTitle(string title)
         {

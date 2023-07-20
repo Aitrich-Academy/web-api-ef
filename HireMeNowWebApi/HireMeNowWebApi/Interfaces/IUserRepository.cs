@@ -5,7 +5,7 @@ namespace HireMeNowWebApi.Interfaces
     public interface IUserRepository
     {
         User getById(Guid userId);
-        User GetUserByEmail(string email, string password);
+        User GetUserByEmail(string email);
         Task<User> registerAsync(User user);
 		User getuser();
 		Task<User> Update(User user);
