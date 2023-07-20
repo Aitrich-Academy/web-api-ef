@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HireMeNowWebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class initial2 : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -45,7 +45,8 @@ namespace HireMeNowWebApi.Migrations
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Role = table.Column<int>(type: "int", nullable: true),
                     About = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Designation = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -103,6 +104,7 @@ namespace HireMeNowWebApi.Migrations
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -170,12 +172,18 @@ namespace HireMeNowWebApi.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AppliedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Applications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Applications_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK__Applicati__JobId__33D4B598",
                         column: x => x.JobId,
@@ -195,6 +203,7 @@ namespace HireMeNowWebApi.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     JobseekerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Time = table.Column<TimeSpan>(type: "time", nullable: true),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -205,6 +214,11 @@ namespace HireMeNowWebApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Interviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Interviews_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK__Interview__Creat__3D5E1FD2",
                         column: x => x.CreatedBy,
@@ -223,6 +237,11 @@ namespace HireMeNowWebApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Applications_CompanyId",
+                table: "Applications",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Applications_JobId",
                 table: "Applications",
                 column: "JobId");
@@ -236,6 +255,11 @@ namespace HireMeNowWebApi.Migrations
                 name: "IX_Experiences_UserId",
                 table: "Experiences",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Interviews_CompanyId",
+                table: "Interviews",
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Interviews_CreatedBy",

@@ -13,8 +13,6 @@ namespace HireMeNowWebApi.Data.Repositories
 			_context = context;
 			_mapper = mapper;
 		}
-
-	
         public List<Application> GetAllByCompany(Guid companyId)
         {
             return _context.Applications.Where(e => e.CompanyId == companyId).ToList();

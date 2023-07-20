@@ -83,7 +83,7 @@ namespace HireMeNowWebApi.Services
 
 		public UserDto login(string email, string password)
         {
-            var user = userRepository.GetUserByEmail(email, password);
+            var user = userRepository.GetUserByEmail(email);
            if( _authHelper.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             { var userReturn= _mapper.Map<UserDto>(user);
                 userReturn.Token=_authHelper.CreateToken(user);
