@@ -20,7 +20,7 @@ namespace HireMeNowWebApi.Controllers
 	[ApiVersion("1.0")]
 	//[Route("api/v{version:apiVersion}/[controller]")]
 	[Route("api/[controller]")]
-	//[Authorize(Roles = "ADMIN")]
+	[Authorize(Roles = "JOB_PROVIDER")]
 	public class JobController : ControllerBase
 	{
 
@@ -29,31 +29,28 @@ namespace HireMeNowWebApi.Controllers
 		private readonly IUnitOfWork _unitOfWork;
 		IJobRepository _jobRepository;
 		// GET: api/<JobController>
-		//public JobController(IJobService jobService, IMapper mapper , IUnitOfWork unitOfWork)
-		//      {
-		//	 _jobService= jobService;
-		//	_mapper= mapper;
-		//	_unitOfWork= unitOfWork;
-
-		//}
+		
 		public JobController(IMapper mapper, IUnitOfWork unitOfWork)
         {
 			
 			_mapper= mapper;
 			_unitOfWork= unitOfWork;
-		}
+			
 
+		}
+		[AllowAnonymous]
 		[HttpGet("/jobs")]
 		public async Task<IActionResult> GetJobAsync([FromQuery] JobListParams param)
 		{
 			//if (param.JobType < 0 || param.JobType  > 4) return BadRequest("Invalid Message Type");
 
 			var jobslist = await _unitOfWork.JobRepository.GetAllByFilter(param);
-		    // Response.AddPaginationHeader(jobslist.CurrentPage, jobslist.PageSize, jobslist.TotalCount, jobslist.TotalPages);
+		    Response.AddPaginationHeader(jobslist.CurrentPage, jobslist.PageSize, jobslist.TotalCount, jobslist.TotalPages);
 			List<JobDto> job = _mapper.Map<List<JobDto>>(jobslist);
 			return Ok(job);
 		}
 		//[HttpGet("/job/GetJobListByid")]
+		[AllowAnonymous]
 		[HttpGet]
 		[Route("jobs/{jobid}")]
 		public IActionResult GetJob(Guid jobid)
@@ -105,12 +102,12 @@ namespace HireMeNowWebApi.Controllers
 		}
 
 		//// DELETE api/<JobController>/5
-		//[HttpDelete("{id}")]
-		//public IActionResult Remove(Guid id)
-		//{
-		//	_jobService.DeleteItemById(id);
-
-		//	return NoContent();
-		//}
+	[HttpDelete("{id}")]
+		public IActionResult Remove(Guid id)
+		{
+			//_jobService.DeleteItemById(id);
+			_unitOfWork.JobRepository.DeleteById(id);
+			return NoContent();
+		}
 	}
 }

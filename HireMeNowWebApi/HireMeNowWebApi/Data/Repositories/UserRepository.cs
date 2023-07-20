@@ -30,7 +30,7 @@ namespace HireMeNowWebApi.Repositories
             return user;
         }
 
-        public User GetUserByEmail(string email, string password)
+        public User GetUserByEmail(string email)
         {
 			//return users.Where(e=>e.Email==email && e.Password==password).FirstOrDefault();
 			return context.Users.FirstOrDefault(e => e.Email==email);

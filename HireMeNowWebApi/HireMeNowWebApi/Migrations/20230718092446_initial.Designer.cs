@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HireMeNowWebApi.Migrations
 {
     [DbContext(typeof(HireMeNowDbContext))]
-    [Migration("20230711101506_initial2")]
-    partial class initial2
+    [Migration("20230718092446_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,9 @@ namespace HireMeNowWebApi.Migrations
                     b.Property<DateTime?>("AppliedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("JobId")
                         .HasColumnType("uniqueidentifier");
 
@@ -44,6 +47,8 @@ namespace HireMeNowWebApi.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("JobId");
 
@@ -134,6 +139,9 @@ namespace HireMeNowWebApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -159,6 +167,8 @@ namespace HireMeNowWebApi.Migrations
                         .HasColumnType("time");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("CreatedBy");
 
@@ -213,6 +223,9 @@ namespace HireMeNowWebApi.Migrations
 
                     b.Property<string>("TypeOfWorkPlace")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("VacanciesCount")
                         .HasColumnType("int");
@@ -318,8 +331,11 @@ namespace HireMeNowWebApi.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
@@ -342,6 +358,10 @@ namespace HireMeNowWebApi.Migrations
 
             modelBuilder.Entity("HireMeNowWebApi.Models.Application", b =>
                 {
+                    b.HasOne("HireMeNowWebApi.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
                     b.HasOne("HireMeNowWebApi.Models.Job", "Job")
                         .WithMany("Applications")
                         .HasForeignKey("JobId")
@@ -351,6 +371,8 @@ namespace HireMeNowWebApi.Migrations
                         .WithMany("Applications")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK__Applicati__UserI__32E0915F");
+
+                    b.Navigation("Company");
 
                     b.Navigation("Job");
 
@@ -368,6 +390,10 @@ namespace HireMeNowWebApi.Migrations
 
             modelBuilder.Entity("HireMeNowWebApi.Models.Interview", b =>
                 {
+                    b.HasOne("HireMeNowWebApi.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
                     b.HasOne("HireMeNowWebApi.Models.User", "CreatedUser")
                         .WithMany("InterviewCreatedByNavigations")
                         .HasForeignKey("CreatedBy")
@@ -382,6 +408,8 @@ namespace HireMeNowWebApi.Migrations
                         .WithMany("InterviewJobseekers")
                         .HasForeignKey("JobseekerId")
                         .HasConstraintName("FK__Interview__Jobse__3C69FB99");
+
+                    b.Navigation("Company");
 
                     b.Navigation("CreatedUser");
 
