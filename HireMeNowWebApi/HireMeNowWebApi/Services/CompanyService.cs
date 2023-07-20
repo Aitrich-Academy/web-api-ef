@@ -1,4 +1,7 @@
-﻿using HireMeNowWebApi.Interfaces;
+﻿using AutoMapper;
+using HireMeNowWebApi.Dtos;
+using HireMeNowWebApi.Helpers;
+using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
 using HireMeNowWebApi.Repositories;
 
@@ -7,21 +10,36 @@ namespace HireMeNowWebApi.Services
     public class CompanyService : ICompanyService
     {
         public IUserRepository _UserRepository;
+		private AuthHelper _authHelper;
+		private IMapper _mapper;
 
-        public ICompanyRepository _CompanyRepository;
 
-        public CompanyService(IUserRepository userRepository, ICompanyRepository companyRepository)
+		public ICompanyRepository _CompanyRepository;
+
+        public CompanyService(IUserRepository userRepository, ICompanyRepository companyRepository,AuthHelper authHelper,IMapper mapper)
         {
             _UserRepository = userRepository;
             _CompanyRepository = companyRepository;
+            _authHelper = authHelper;
+            _mapper = mapper;
         }
 
-        public User memberRegister(User user)
-        {
-            return _UserRepository.memberRegister(user);
-        }
+        //public Task<User> memberRegister(User user)
+        //{
+        //    return _UserRepository.memberRegister(user);
+        //}
+		public async Task<User> memberRegister(CompanyMemberDto companyMemberDto)
+		{
+			_authHelper.CreatePasswordHash(companyMemberDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
+			User user = _mapper.Map<User>(companyMemberDto);
+			user.PasswordHash = passwordHash;
+			user.PasswordSalt = passwordSalt;
+			user.Role = Enums.Roles.COMPANY_MEMBER;
 
-        public List<User> memberListing(Guid companyId)
+			return await _UserRepository.memberRegister(user);
+		}
+
+		public List<User> memberListing(Guid companyId)
         {
             return _UserRepository.memberListing(companyId);
         }

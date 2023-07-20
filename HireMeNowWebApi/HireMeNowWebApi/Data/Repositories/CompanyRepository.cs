@@ -16,38 +16,40 @@ namespace HireMeNowWebApi.Repositories
         public List<Company> getAllCompanies(string? name)
         {
             if(name == null)    
-            return companies;
-            else return companies.Where(e=>e.Name.Contains(name,StringComparison.OrdinalIgnoreCase)).ToList();
+            return context.Companies.ToList();
+            else return context.Companies.Where(e=>e.Name.Contains(name,StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         public Company? getById(Guid id)
         {
-           return companies.Where(c=>c.Id == id).FirstOrDefault();
+           return context.Companies.Where(c=>c.Id == id).FirstOrDefault();
         }
 
         public Company? Register(Company company)
         {
             company.Id=Guid.NewGuid();
-            companies.Add(company);
+           context.Companies.Add(company);
+            context.SaveChanges();
             return company;
         }
 
         public Company Update(Company company)
         {
-            int indexToUpdate = companies.FindIndex(item => item.Id == company.Id);
-            if (indexToUpdate != -1)
+            var indexToUpdate =context.Companies.Where(item => item.Id == company.Id).FirstOrDefault();
+            if (indexToUpdate != null)
             {
-                // Modify the properties of the item at the found index
-                companies[indexToUpdate].About = company.About ?? companies[indexToUpdate].About;
-                companies[indexToUpdate].Name = company.Name ?? companies[indexToUpdate].Name;
-                companies[indexToUpdate].Email = company.Email ?? companies[indexToUpdate].Email;
-                companies[indexToUpdate].Website = company.Website ?? companies[indexToUpdate].Website;
-                companies[indexToUpdate].Vision = company.Vision??companies[indexToUpdate].Vision;
-                companies[indexToUpdate].Mission = company.Mission??companies[indexToUpdate].Mission;
-                companies[indexToUpdate].Location = company.Location??companies[indexToUpdate].Location;
-                companies[indexToUpdate].Address = company.Address??companies[indexToUpdate].Address;
-                //companies[indexToUpdate].Logo = company.Address??companies[indexToUpdate].Address;
-                companies[indexToUpdate].Phone = company.Phone==null ? companies[indexToUpdate].Phone : company.Phone;
+				// Modify the properties of the item at the found index
+				indexToUpdate.Name = company.Name ?? indexToUpdate.Name;
+
+                indexToUpdate.Email = company.Email ?? indexToUpdate.Email;
+
+				indexToUpdate.Website = company.Website ?? indexToUpdate.Website;
+				indexToUpdate.Vision = company.Vision ?? indexToUpdate.Vision;
+				indexToUpdate.Mission = company.Mission ?? indexToUpdate.Mission;
+				indexToUpdate.Location = company.Location ?? indexToUpdate.Location;
+				indexToUpdate.Address = company.Address ?? indexToUpdate.Address;
+				indexToUpdate.Logo = company.Logo ?? indexToUpdate.Logo;
+				indexToUpdate.Phone = company.Phone==null ? indexToUpdate.Phone : company.Phone;
 
             }
             else
@@ -55,7 +57,7 @@ namespace HireMeNowWebApi.Repositories
                 throw new NotFoundException("Company Not Found");
             }
 
-            return companies[indexToUpdate];
+            return indexToUpdate;
         }
     }
 }

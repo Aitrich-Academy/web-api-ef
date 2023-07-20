@@ -15,6 +15,7 @@ namespace HireMeNowWebApi.Interfaces
 		 string GetCurrentUsername();
 		 string GetCurrentUserRole();
 		string GetCurrentUserEmail();
+	
 
 	}
 }

@@ -3,6 +3,8 @@ using HireMeNowWebApi.Data.UnitOfWorks;
 using HireMeNowWebApi.Dtos;
 using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
+using HireMeNowWebApi.Repositories;
+using HireMeNowWebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,21 +16,33 @@ namespace HireMeNowWebApi.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
+		private readonly ICompanyService _companyService;
 
-        public CompanyController(IUnitOfWork unitOfWork, IMapper mapper)
+
+
+		public CompanyController(IUnitOfWork unitOfWork, IMapper mapper,IUserRepository userRepository,ICompanyService companyService)
         {
 			_unitOfWork = unitOfWork;
             _mapper = mapper;
-        }
+            _userRepository = userRepository;
+            _companyService = companyService;
+
+		}
 
         [HttpPost("/company/memberRegister")]
-        public IActionResult memberRegister(UserDto userDto)
-        {
-            var user = _mapper.Map<User>(userDto);
-            return Ok(_unitOfWork.UserRepository.memberRegister(user));
+		public IActionResult memberRegister(CompanyMemberDto companyMemberDto)
+        { 
+			if (_userRepository.IsUserExist(companyMemberDto.Email))
+            {
+				return BadRequest("User Already Exist");
+			}
+			
+            return Ok(_companyService.memberRegister(companyMemberDto));
+         
         }
-
-        [HttpGet("/company/memberListing")]
+	
+		[HttpGet("/company/memberListing")]
         public IActionResult memberListing(Guid companyId) 
         {
             if (companyId == null)
