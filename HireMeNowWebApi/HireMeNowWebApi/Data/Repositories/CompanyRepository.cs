@@ -17,7 +17,7 @@ namespace HireMeNowWebApi.Repositories
         {
             if(name == null)    
             return context.Companies.ToList();
-            else return context.Companies.Where(e=>e.Name.Contains(name,StringComparison.OrdinalIgnoreCase)).ToList();
+            else return context.Companies.Where(e=>e.Name==name).ToList();
         }
 
         public Company? getById(Guid id)
@@ -50,8 +50,10 @@ namespace HireMeNowWebApi.Repositories
 				indexToUpdate.Address = company.Address ?? indexToUpdate.Address;
 				indexToUpdate.Logo = company.Logo ?? indexToUpdate.Logo;
 				indexToUpdate.Phone = company.Phone==null ? indexToUpdate.Phone : company.Phone;
+				context.Companies.Update(indexToUpdate);
+				 context.SaveChanges();
 
-            }
+			}
             else
             {
                 throw new NotFoundException("Company Not Found");

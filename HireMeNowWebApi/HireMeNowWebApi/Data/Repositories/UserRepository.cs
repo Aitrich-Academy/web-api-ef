@@ -121,6 +121,7 @@ namespace HireMeNowWebApi.Repositories
             if (user!=null)
             {
                 context.Users.Remove(user);
+                context.SaveChanges();
             }
         }
 

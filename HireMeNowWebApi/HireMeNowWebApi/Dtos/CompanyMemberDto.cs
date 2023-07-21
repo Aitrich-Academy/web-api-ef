@@ -25,7 +25,7 @@ namespace HireMeNowWebApi.Dtos
 		public string? Token { get; set; }
 
 	
-		public CompanyMemberDto(string firstName, string lastName, string email, string gender, string? location, long phone, string password, Roles role)
+		public CompanyMemberDto(string firstName, string lastName, string email, string gender, string? location, long phone, string password, Roles role, Guid companyId)
 		{
 			FirstName = firstName;
 			LastName = lastName;
@@ -35,6 +35,7 @@ namespace HireMeNowWebApi.Dtos
 			Phone = phone;
 			Password = password;
 			Role = role;
+			CompanyId = companyId;
 		}
 
 		public CompanyMemberDto()
