@@ -39,19 +39,20 @@ namespace HireMeNowWebApi.Repositories
 
         public async Task<User> registerAsync(User user)
         {
-            user.Id = Guid.NewGuid();
-            //user.Role = Roles.JobSeeker;
+			user.Id = Guid.NewGuid();
+			//user.Role = Roles.CompanyMember;
 
-            if (context.Users.Where(e => e.Email == user.Email).Count()<=0)
-            {
+			if (context.Users.Where(e => e.Email == user.Email).Count() <= 0)
+			{
 				await context.Users.AddAsync(user);
 				context.SaveChanges();
 				return user;
-            }
-            else
-            {
-                throw new UserAlreadyExistException(user.Email);
-            }
+			}
+			else
+			{
+				throw new UserAlreadyExistException(user.Email);
+			}
+			
         }
 
         public async Task<User> Update(User updatedUser)
@@ -80,7 +81,7 @@ namespace HireMeNowWebApi.Repositories
 
             return usertoUpdate;
         }
-
+		
 		public async Task<User> memberRegister(User user)
         {
             user.Id = Guid.NewGuid();
@@ -88,9 +89,9 @@ namespace HireMeNowWebApi.Repositories
 
             if (context.Users.Where(e => e.Email == user.Email).Count()<=0)
             {
-			 await context.Users.AddAsync(user);
+			  await context.Users.AddAsync(user);
                 context.SaveChanges();
-				return  user;
+                return user;
             }
             else
             {

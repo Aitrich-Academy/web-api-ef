@@ -32,8 +32,8 @@ namespace HireMeNowWebApi.Controllers
 			{
 				return BadRequest("User Already Exist");
 			}
-			
-				return Ok(_userService.register(userDto));
+			userDto.Role = Enums.Roles.JOBSEEKER;
+			return Ok(_userService.register(userDto));
 			
 		}
 

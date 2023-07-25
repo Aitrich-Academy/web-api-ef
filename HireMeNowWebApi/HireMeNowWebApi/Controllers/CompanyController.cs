@@ -38,7 +38,8 @@ namespace HireMeNowWebApi.Controllers
 				return BadRequest("User Already Exist");
 			}
 			
-            return Ok(_companyService.memberRegister(companyMemberDto));
+             _companyService.memberRegister(companyMemberDto);
+            return Ok();
          
         }
 	

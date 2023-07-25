@@ -28,7 +28,7 @@ namespace HireMeNowWebApi.Services
         //{
         //    return _UserRepository.memberRegister(user);
         //}
-		public async Task<User> memberRegister(CompanyMemberDto companyMemberDto)
+		public async Task memberRegister(CompanyMemberDto companyMemberDto)
 		{
 			_authHelper.CreatePasswordHash(companyMemberDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
 			User user = _mapper.Map<User>(companyMemberDto);
@@ -36,8 +36,10 @@ namespace HireMeNowWebApi.Services
 			user.PasswordSalt = passwordSalt;
 			user.Role = Enums.Roles.COMPANY_MEMBER;
 
-			return await _UserRepository.memberRegister(user);
+            //await _UserRepository.memberRegister(user);
+            await _UserRepository.memberRegister(user);
 		}
+	
 
 		public List<User> memberListing(Guid companyId)
         {

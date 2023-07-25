@@ -7,6 +7,7 @@ using HireMeNowWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace HireMeNowWebApi.Controllers
 {
@@ -42,14 +43,18 @@ namespace HireMeNowWebApi.Controllers
         //    return Ok(_mapper.Map<UserDto>(user));
         //}
         [HttpGet("/account/profile")]
-        public IActionResult GetProfile()
-        {
-            var user = _userService.GetCurrentUser();
-            
-            return Ok(user);
-        }
 
-        [HttpPut("/account/profile")]
+		[AllowAnonymous]
+		public IActionResult GetProfile()
+        {
+			var currentUser = HttpContext.User;
+			var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+		
+            
+            return Ok(currentUser);
+        }
+		[AllowAnonymous]
+		[HttpPut("/account/profile")]
         public async Task<IActionResult> UpdateProfile(UserDto userDto)
         {
             var userToUpdate= _mapper.Map<User>(userDto);
@@ -57,6 +62,7 @@ namespace HireMeNowWebApi.Controllers
            
             return Ok(_mapper.Map<UserDto>(user));
         }
+		[AllowAnonymous]
 
 		[HttpGet("/account/getAllUsers")]
 		public IActionResult getAllUsers()
@@ -69,6 +75,7 @@ namespace HireMeNowWebApi.Controllers
 			}
 			return Ok(users);
 		}
+		[AllowAnonymous]
 		[HttpGet("/account/getbyId")]
 		public IActionResult getbyId(Guid UId)
 		{

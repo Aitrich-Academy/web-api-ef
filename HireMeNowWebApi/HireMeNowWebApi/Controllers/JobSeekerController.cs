@@ -27,6 +27,7 @@ namespace HireMeNowWebApi.Controllers
 			_applicationService = applicationService;
 		}
 		[HttpPost]
+		[AllowAnonymous]
 		public IActionResult ApplyJob(Guid jobId)
 		{
 			if (jobId != null)

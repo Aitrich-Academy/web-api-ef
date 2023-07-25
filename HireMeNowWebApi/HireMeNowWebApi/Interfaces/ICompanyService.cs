@@ -5,7 +5,7 @@ namespace HireMeNowWebApi.Interfaces
 {
     public interface ICompanyService
     {
-		Task<User> memberRegister(CompanyMemberDto companyMemberDto);
+		Task memberRegister(CompanyMemberDto companyMemberDto);
 		public List<User> memberListing(Guid companyId);
         void memberDeleteById(Guid id);
         Company? Register(Company company);
