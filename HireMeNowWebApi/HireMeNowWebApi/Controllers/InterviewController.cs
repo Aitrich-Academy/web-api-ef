@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using HireMeNowWebApi.Dtos;
+using HireMeNowWebApi.Enums;
 using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
 using HireMeNowWebApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +12,10 @@ namespace HireMeNowWebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[ApiVersion("1.0")]
+	//[Route("api/v{version:apiVersion}/[controller]")]
+	
+	//[Authorize(Roles = "JOB_PROVIDER")]
 	public class InterviewController : ControllerBase
 	{
 
