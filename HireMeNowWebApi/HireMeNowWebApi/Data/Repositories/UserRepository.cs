@@ -3,6 +3,7 @@ using HireMeNowWebApi.Enums;
 using HireMeNowWebApi.Exceptions;
 using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace HireMeNowWebApi.Repositories
@@ -38,19 +39,20 @@ namespace HireMeNowWebApi.Repositories
 
         public async Task<User> registerAsync(User user)
         {
-            user.Id = Guid.NewGuid();
-            //user.Role = Roles.JobSeeker;
+			user.Id = Guid.NewGuid();
+			//user.Role = Roles.CompanyMember;
 
-            if (context.Users.Where(e => e.Email == user.Email).Count()<=0)
-            {
+			if (context.Users.Where(e => e.Email == user.Email).Count() <= 0)
+			{
 				await context.Users.AddAsync(user);
 				context.SaveChanges();
 				return user;
-            }
-            else
-            {
-                throw new UserAlreadyExistException(user.Email);
-            }
+			}
+			else
+			{
+				throw new UserAlreadyExistException(user.Email);
+			}
+			
         }
 
         public async Task<User> Update(User updatedUser)
@@ -79,15 +81,16 @@ namespace HireMeNowWebApi.Repositories
 
             return usertoUpdate;
         }
-
-        public User memberRegister(User user)
+		
+		public async Task<User> memberRegister(User user)
         {
             user.Id = Guid.NewGuid();
             //user.Role = Roles.CompanyMember;
 
-            if (users.Find(e => e.Email == user.Email) == null)
+            if (context.Users.Where(e => e.Email == user.Email).Count()<=0)
             {
-                users.Add(user);
+			  await context.Users.AddAsync(user);
+                context.SaveChanges();
                 return user;
             }
             else
@@ -98,27 +101,28 @@ namespace HireMeNowWebApi.Repositories
 
         public List<User> memberListing(Guid companyId) 
         {
-            var memberList = users.Where(e=>e.Role==Roles.COMPANY_MEMBER && e.CompanyId==companyId).ToList();
+            var memberList = context.Users.Where(e=>e.Role==Roles.COMPANY_MEMBER && e.CompanyId==companyId).ToList();
             return memberList;
         }
 
 		public User getuser()
 		{
-			return users.FirstOrDefault();
+			return context.Users.FirstOrDefault();
 		}
 	
 
 		public List<User> getAllUsers()
 		{
-            return users;
+            return context.Users.ToList();
 		}
 
         public void memberDeleteById(Guid id)
         {
-            User user = users.Find(e => e.Id==id);
+            User user = context.Users.Where(e => e.Id==id).FirstOrDefault();
             if (user!=null)
             {
-                users.Remove(user);
+                context.Users.Remove(user);
+                context.SaveChanges();
             }
         }
 

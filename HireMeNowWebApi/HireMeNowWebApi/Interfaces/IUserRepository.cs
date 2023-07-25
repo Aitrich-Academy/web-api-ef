@@ -9,7 +9,7 @@ namespace HireMeNowWebApi.Interfaces
         Task<User> registerAsync(User user);
 		User getuser();
 		Task<User> Update(User user);
-        User memberRegister(User user);
+		Task<User> memberRegister(User user);
         List<User> memberListing(Guid companyId);
 
         List<User> getAllUsers();
