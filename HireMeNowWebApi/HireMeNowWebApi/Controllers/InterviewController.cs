@@ -30,6 +30,7 @@ namespace HireMeNowWebApi.Controllers
 		[HttpPost("/interview/interviewShedule")]
 		public IActionResult InterviewShedule(InterviewDto interviewDto)
 		{
+			
 			var interview = _mapper.Map<Interview>(interviewDto);
 			return Ok(_interviewService.sheduleinterview(interview));
 		}

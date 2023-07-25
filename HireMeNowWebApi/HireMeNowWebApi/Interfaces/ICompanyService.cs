@@ -1,11 +1,12 @@
-﻿using HireMeNowWebApi.Models;
+﻿using HireMeNowWebApi.Dtos;
+using HireMeNowWebApi.Models;
 
 namespace HireMeNowWebApi.Interfaces
 {
     public interface ICompanyService
     {
-        User memberRegister(User user);
-        public List<User> memberListing(Guid companyId);
+		Task memberRegister(CompanyMemberDto companyMemberDto);
+		public List<User> memberListing(Guid companyId);
         void memberDeleteById(Guid id);
         Company? Register(Company company);
         Company Update(Company company);

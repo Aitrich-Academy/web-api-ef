@@ -108,7 +108,7 @@ namespace HireMeNowWebApi.Services
             var updateduser= await userRepository.Update(user);
             return updateduser;
         }
+		
 
-	
 	}
 }
