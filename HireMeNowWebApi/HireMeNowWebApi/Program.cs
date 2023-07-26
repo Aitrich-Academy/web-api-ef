@@ -47,11 +47,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			ValidateAudience = false
 		};
 	});
-//builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
-//	policy =>
-//	{
-//		policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-//	}));
+builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
+policy =>
+	{
+		policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();	}));
 
 
 //Configuring Api Versioning
