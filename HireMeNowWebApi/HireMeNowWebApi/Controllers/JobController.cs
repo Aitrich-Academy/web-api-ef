@@ -39,7 +39,7 @@ namespace HireMeNowWebApi.Controllers
 
 		}
 		[AllowAnonymous]
-		[HttpGet("/jobs")]
+		[HttpGet("/get-all")]
 		public async Task<IActionResult> GetJobAsync([FromQuery] JobListParams param)
 		{
 			//if (param.JobType < 0 || param.JobType  > 4) return BadRequest("Invalid Message Type");
@@ -52,7 +52,7 @@ namespace HireMeNowWebApi.Controllers
 		//[HttpGet("/job/GetJobListByid")]
 		[AllowAnonymous]
 		[HttpGet]
-		[Route("jobs/{jobid}")]
+		[Route("/{jobid}")]
 		public IActionResult GetJob(Guid jobid)
 		{
 			Job job = _unitOfWork.JobRepository.GetJobById(jobid);
@@ -79,7 +79,7 @@ namespace HireMeNowWebApi.Controllers
 		//}
 
 		//// POST api/<JobController>
-		[HttpPost]
+		[HttpPost("/addjob")]
 		public async Task<IActionResult> PostJobAsync(JobDto jobDto)
 		{
 			var job = _mapper.Map<Job>(jobDto);
@@ -90,8 +90,8 @@ namespace HireMeNowWebApi.Controllers
 		}
 
 		//// PUT api/<JobController>/5
-		[HttpPut]
-		[Route("job/{id}")]
+		[HttpPut("JobUpdate/{id}")]
+	
 		public async Task<IActionResult> Update(JobDto jobdto,Guid id)
 		{
 			jobdto.Id=id;
