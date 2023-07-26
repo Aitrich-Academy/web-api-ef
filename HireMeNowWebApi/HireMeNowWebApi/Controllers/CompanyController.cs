@@ -7,12 +7,14 @@ using HireMeNowWebApi.Repositories;
 using HireMeNowWebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HireMeNowWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompanyController : ControllerBase
+	[Produces("application/json")]
+	public class CompanyController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -86,17 +88,35 @@ namespace HireMeNowWebApi.Controllers
         }
 
         [HttpPut("/company/profile")]
-        public IActionResult UpdateProfile(CompanyDto companyDto)
+        public IActionResult UpdateProfile([FromForm] CompanyDto companyDto)
         {
             if (companyDto.Id==null)
             {
                 return BadRequest("Id is required ");
             }
             Company company = _mapper.Map<Company>(companyDto);
-
-            Company updatedCompany = _unitOfWork.CompanyRepository.Update(company);
+			byte[] byteArray = _unitOfWork.CompanyRepository.ConvertImageToByteArray(companyDto.ImageFile);
+			Company updatedCompany = _unitOfWork.CompanyRepository.Update(company);
 
             return Ok(_mapper.Map<CompanyDto>(updatedCompany));
         }
-    }
+
+
+		[HttpPut("/company/logo")]
+		public IActionResult UpdateLogo( IFormFile? logo)
+		{
+			if (logo == null || logo.Length == 0)
+				return BadRequest("Image file is required.");
+             
+			//byte[] byteArray = _unitOfWork.CompanyRepository.ConvertImageToByteArray(logo);
+
+			// Now you can use the byteArray as needed (e.g., save it to the database, manipulate, etc.).
+
+			return Ok("Image successfully uploaded.");
+		}
+
+		
+
+	
+	}
 }

@@ -25,7 +25,8 @@ namespace HireMeNowWebApi.Controllers
 		}
 
 		[HttpPost]
-		[Route("register")]
+		[Route("/user/register")]
+	
 		public IActionResult Register(UserDto userDto)
 		{
 			if (_userRepository.IsUserExist(userDto.Email))
@@ -38,7 +39,7 @@ namespace HireMeNowWebApi.Controllers
 		}
 
 		[HttpPost]
-		[Route("login")]
+		[Route("/user/login")]
 		public IActionResult Login(LoginDto loginDto)
 		{
 			//var user = _mapper.Map<User>(userDto);

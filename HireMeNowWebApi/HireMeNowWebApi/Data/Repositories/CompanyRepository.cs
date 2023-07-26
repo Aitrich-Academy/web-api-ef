@@ -13,7 +13,19 @@ namespace HireMeNowWebApi.Repositories
         {
             context= _context;
         }
-        public List<Company> getAllCompanies(string? name)
+
+		public byte[] ConvertImageToByteArray(IFormFile image)
+		{
+	
+				using (var memoryStream = new MemoryStream())
+				{
+					image.CopyTo(memoryStream);
+					return memoryStream.ToArray();
+				}
+			
+		}
+
+		public List<Company> getAllCompanies(string? name)
         {
             if(name == null)    
             return context.Companies.ToList();
