@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HireMeNowWebApi.Data.Repositories
 {
@@ -23,5 +24,12 @@ namespace HireMeNowWebApi.Data.Repositories
 			_context.SaveChanges();
 			//_applications.Add(new Application(job, user, "Pending"));
 		}
+        public List<Application> GetAll(Guid userId)
+        {
+            return _context.Applications.Where(e => e.User.Id == userId).Include(x=>x.Job).ToList();
+
+
+
+        }
     }
 }

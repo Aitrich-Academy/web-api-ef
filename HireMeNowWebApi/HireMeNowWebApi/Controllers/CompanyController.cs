@@ -60,17 +60,24 @@ namespace HireMeNowWebApi.Controllers
         [HttpDelete("/company/RemoveMember")]
         public IActionResult memberDelete(Guid id)
         {
-            _unitOfWork.UserRepository.memberDeleteById(id);
+             _unitOfWork.UserRepository.memberDeleteById(id);
             return NoContent(); 
         }
 
         [HttpPost("/company/register")]
         public IActionResult RegisterCompany(CompanyDto companyDto)
         {
-            if (companyDto.Name == null)
-                return BadRequest("Company Name Is Required ");
-            Company company = _mapper.Map<Company>(companyDto);
-            return Ok(_unitOfWork.CompanyRepository.Register(company));
+            if (_userRepository.IsUserExist(companyDto.Email))
+            {
+                return BadRequest("User Already Exist");
+            }
+            else
+            {
+                Company company = _mapper.Map<Company>(companyDto);
+                return Ok(_unitOfWork.CompanyRepository.Register(company));
+            }
+       
+           
         }
 
         [HttpGet("/company/list")]

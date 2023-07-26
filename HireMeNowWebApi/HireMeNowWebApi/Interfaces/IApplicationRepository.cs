@@ -6,5 +6,8 @@ namespace HireMeNowWebApi.Interfaces
 	{
 		public List<Application> GetAllByCompany(Guid comapnyId);
 		public void AddApplication(Application application);
-	}
+		List<Application> GetAll(Guid userId);
+
+    }
+
 }

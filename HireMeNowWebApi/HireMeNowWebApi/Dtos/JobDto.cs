@@ -16,14 +16,14 @@ namespace HireMeNowWebApi.Dtos
 	
 		public string? CompanyName { get; set; }
 		public Guid CompanyId { get; set; }
-		
+
 		//[JsonIgnore]
 		//public Company? Company { get; set; }
 
-		public JobDto(string title, string description, string location, string salary, Guid companyId, string company)
+		public JobDto( string title, string description, string location, string salary, Guid companyId, string company, Guid? id = null)
 		{
-			Id = Guid.NewGuid();
-			Title = title;
+			Id=id??Guid.NewGuid();
+            Title = title;
 			Description = description;
 			Location = location;
 			Salary = salary;
