@@ -39,6 +39,20 @@ namespace HireMeNowWebApi.Controllers
 		}
 
 		[HttpPost]
+		[Route("/provider/register")]
+
+		public IActionResult ProviderRegister(UserDto userDto)
+		{
+			if (_userRepository.IsUserExist(userDto.Email))
+			{
+				return BadRequest("Provider Already Exist");
+			}
+		
+			return Ok(_userService.register(userDto));
+
+		}
+
+		[HttpPost]
 		[Route("/user/login")]
 		public IActionResult Login(LoginDto loginDto)
 		{
