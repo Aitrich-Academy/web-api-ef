@@ -28,5 +28,10 @@ namespace HireMeNowWebApi.Services
 
 			_applicationRepository.AddApplication(application);
 		}
-	}
+
+        public List<Application> GetAll(Guid userId)
+        {
+            return _applicationRepository.GetAll(userId);
+        }
+    }
 }

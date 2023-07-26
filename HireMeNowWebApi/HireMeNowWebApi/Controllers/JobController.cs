@@ -30,11 +30,13 @@ namespace HireMeNowWebApi.Controllers
 		IJobRepository _jobRepository;
 		// GET: api/<JobController>
 		
-		public JobController(IMapper mapper, IUnitOfWork unitOfWork)
+		public JobController(IMapper mapper, IUnitOfWork unitOfWork,IJobService jobService,IJobRepository jobRepostory)
         {
 			
 			_mapper= mapper;
 			_unitOfWork= unitOfWork;
+			_jobService = jobService;
+			_jobRepository = jobRepostory;
 			
 
 		}
@@ -79,6 +81,7 @@ namespace HireMeNowWebApi.Controllers
 		//}
 
 		//// POST api/<JobController>
+		[AllowAnonymous]
 		[HttpPost]
 		public async Task<IActionResult> PostJobAsync(JobDto jobDto)
 		{
@@ -90,6 +93,7 @@ namespace HireMeNowWebApi.Controllers
 		}
 
 		//// PUT api/<JobController>/5
+		[AllowAnonymous]
 		[HttpPut]
 		[Route("job/{id}")]
 		public async Task<IActionResult> Update(JobDto jobdto,Guid id)
@@ -102,7 +106,8 @@ namespace HireMeNowWebApi.Controllers
 		}
 
 		//// DELETE api/<JobController>/5
-	[HttpDelete("{id}")]
+		[AllowAnonymous]
+		[HttpDelete("{id}")]
 		public IActionResult Remove(Guid id)
 		{
 			//_jobService.DeleteItemById(id);

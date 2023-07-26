@@ -13,7 +13,7 @@ namespace HireMeNowWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "JOB_PROVIDER")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -44,16 +44,16 @@ namespace HireMeNowWebApi.Controllers
         //}
         [HttpGet("/account/profile")]
 
-		[AllowAnonymous]
+		
 		public IActionResult GetProfile()
         {
-			var currentUser = HttpContext.User;
-			var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			//var currentUser = HttpContext.User;
+			//var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 		
             
-            return Ok(currentUser);
+            return Ok(_userService.GetCurrentUser());
         }
-		[AllowAnonymous]
+      
 		[HttpPut("/account/profile")]
         public async Task<IActionResult> UpdateProfile(UserDto userDto)
         {
@@ -62,30 +62,33 @@ namespace HireMeNowWebApi.Controllers
            
             return Ok(_mapper.Map<UserDto>(user));
         }
-		[AllowAnonymous]
+	
 
 		[HttpGet("/account/getAllUsers")]
 		public IActionResult getAllUsers()
 		{
             List<User> users = _userService.getAllUsers();
-			if (users == null)
+            List<UserDto> users1 = _mapper.Map<List<UserDto>>(users);
+
+            if (users == null)
 			{
 				return BadRequest("Not Found.");
 			
 			}
-			return Ok(users);
+			return Ok(users1);
 		}
-		[AllowAnonymous]
+	
 		[HttpGet("/account/getbyId")]
 		public IActionResult getbyId(Guid UId)
 		{
 			User users = _userService.getById(UId);
+            UserDto user1 = _mapper.Map<UserDto>(users);
 			if (users == null)
 			{
 				return BadRequest("Not Found.");
 
 			}
-			return Ok(users);
+			return Ok(user1);
 		}
 	}
 }

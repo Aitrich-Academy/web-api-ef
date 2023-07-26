@@ -16,7 +16,7 @@ namespace HireMeNowWebApi.Dtos
 		public Guid Id { get; set; }
 		 public Guid JobID { get; set; }
 		public Guid UserID { get; set; }
-		
+        public virtual JobDto? Job { get; set; }
 
-	}
+    }
 }

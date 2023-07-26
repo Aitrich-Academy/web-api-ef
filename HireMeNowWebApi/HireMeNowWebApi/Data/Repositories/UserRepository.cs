@@ -70,7 +70,10 @@ namespace HireMeNowWebApi.Repositories
                 usertoUpdate.Location = updatedUser.Location??usertoUpdate.Location;
                 usertoUpdate.Gender = updatedUser.Gender??usertoUpdate.Gender;
                 usertoUpdate.Phone = updatedUser.Phone==null?usertoUpdate.Phone : updatedUser.Phone;
-                 context.Users.Update(usertoUpdate);
+                usertoUpdate.Email = updatedUser.Email == null ? usertoUpdate.Email : updatedUser.Email;
+                
+               
+                context.Users.Update(usertoUpdate);
 				await context.SaveChangesAsync();
 
 			}
