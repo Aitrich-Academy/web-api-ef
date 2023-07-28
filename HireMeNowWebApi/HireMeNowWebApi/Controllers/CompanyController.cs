@@ -103,9 +103,10 @@ namespace HireMeNowWebApi.Controllers
             }
             Company company = _mapper.Map<Company>(companyDto);
 			byte[] byteArray = _unitOfWork.CompanyRepository.ConvertImageToByteArray(companyDto.ImageFile);
+            company.Logo = byteArray;
 			Company updatedCompany = _unitOfWork.CompanyRepository.Update(company);
 
-            return Ok(_mapper.Map<CompanyDto>(updatedCompany));
+            return Ok(_mapper.Map<Company>(updatedCompany));
         }
 
 

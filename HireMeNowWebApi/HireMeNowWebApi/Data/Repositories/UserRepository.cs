@@ -64,7 +64,7 @@ namespace HireMeNowWebApi.Repositories
                 usertoUpdate.About = updatedUser.About ?? usertoUpdate.About;
                 //usertoUpdate.Experiences = updatedUser.Experiences ?? usertoUpdate.Experiences;
                 //usertoUpdate.Educations = updatedUser.Educations ?? usertoUpdate.Educations;
-                //usertoUpdate.Skills = updatedUser.Skills ?? usertoUpdate.Skills;
+                usertoUpdate.Image = updatedUser.Image ?? usertoUpdate.Image;
                 usertoUpdate.FirstName = updatedUser.FirstName??usertoUpdate.FirstName;
                 usertoUpdate.LastName = updatedUser.LastName??usertoUpdate.LastName;
                 usertoUpdate.Location = updatedUser.Location??usertoUpdate.Location;
@@ -132,6 +132,15 @@ namespace HireMeNowWebApi.Repositories
 		public bool IsUserExist(string email)
 		{
            return context.Users.Where(e => e.Email==email).ToList().Count>0;
+		}
+
+		public byte[] ConvertImageToByteArray(IFormFile image)
+		{
+			using (var memoryStream = new MemoryStream())
+			{
+				image.CopyTo(memoryStream);
+				return memoryStream.ToArray();
+			}
 		}
 	}
 
