@@ -41,7 +41,7 @@ public partial class User
 
     public string? Status { get; set; }
 
-    public string? Image { get; set; }
+    public byte[]? Image { get; set; }
 
     public DateTime? CreatedDate { get; set; }
 

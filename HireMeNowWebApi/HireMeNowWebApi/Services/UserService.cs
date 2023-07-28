@@ -62,7 +62,7 @@ namespace HireMeNowWebApi.Services
 			return result;
 		}
 
-		public string GetUserId()
+		public string GetUserId()  
 		{
 			var result = string.Empty;
 			if (_httpContextAccessor.HttpContext != null)
@@ -101,7 +101,7 @@ namespace HireMeNowWebApi.Services
             User user = _mapper.Map<User>(userdto);
             user.PasswordHash=passwordHash;
             user.PasswordSalt=passwordSalt;
-			user.Role=Enums.Roles.JOBSEEKER;
+			//user.Role=Enums.Roles.JOBSEEKER;
 			return await userRepository.registerAsync(user);
         }
 

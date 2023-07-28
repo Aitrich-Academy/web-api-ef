@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HireMeNowWebApi.Data.UnitOfWorks;
 using HireMeNowWebApi.Dtos;
 using HireMeNowWebApi.Enums;
 using HireMeNowWebApi.Exceptions;
@@ -18,12 +19,14 @@ namespace HireMeNowWebApi.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-
-        public UserController(IUserService userService, IMapper mapper)
+		private readonly IUnitOfWork _unitOfWork;
+		public UserController(IUserService userService, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _userService=userService;
             _mapper=mapper;
-        }
+			_unitOfWork = unitOfWork;
+
+		}
         //[HttpPost("/account/register")]
         //public IActionResult Register(UserDto userDto)
         //{
@@ -55,12 +58,19 @@ namespace HireMeNowWebApi.Controllers
         }
 		[AllowAnonymous]
 		[HttpPut("/account/profile")]
-        public async Task<IActionResult> UpdateProfile(UserDto userDto)
+        public async Task<IActionResult> UpdateProfile([FromForm] UserDto userDto)
         {
-            var userToUpdate= _mapper.Map<User>(userDto);
-            User user =await _userService.UpdateAsync(userToUpdate);
+			if (userDto.Id == null)
+			{
+				return BadRequest("Id is required ");
+			}
+			var userToUpdate= _mapper.Map<User>(userDto);
+
+            byte[] byteArray = _unitOfWork.UserRepository.ConvertImageToByteArray(userDto.ImageFile);
+			userToUpdate.Image = byteArray;
+;			User user =await _userService.UpdateAsync(userToUpdate);
            
-            return Ok(_mapper.Map<UserDto>(user));
+            return Ok(_mapper.Map<UserDto>(User));
         }
 		[AllowAnonymous]
 
