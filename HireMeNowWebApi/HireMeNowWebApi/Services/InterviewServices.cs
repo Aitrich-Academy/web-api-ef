@@ -1,4 +1,5 @@
-﻿using HireMeNowWebApi.Interfaces;
+﻿using HireMeNowWebApi.Helpers;
+using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
 using HireMeNowWebApi.Repositories;
 
@@ -18,9 +19,9 @@ namespace HireMeNowWebApi.Services
 			interviewRepository.removeInterview(id);
 		}
 
-		public List<Interview> sheduledInterviewList()
+		public async Task<PagedList<Interview>> sheduledInterviewList(InterviewParams param)
 		{
-			return interviewRepository.sheduledInterviewList();
+			return await interviewRepository.sheduledInterviewList(param);
 		}
 
 		public Interview sheduleinterview(Interview interview)

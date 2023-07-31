@@ -28,8 +28,16 @@ namespace HireMeNowWebApi.Controllers
 		private readonly IMapper _mapper;
 		private readonly IUnitOfWork _unitOfWork;
 		IJobRepository _jobRepository;
+		private IMapper mapper;
+		private IInterviewServices @object;
+
+	
+
+
+
+
 		// GET: api/<JobController>
-		
+
 		public JobController(IMapper mapper, IUnitOfWork unitOfWork,IJobService jobService,IJobRepository jobRepostory)
         {
 			
@@ -40,6 +48,15 @@ namespace HireMeNowWebApi.Controllers
 			
 
 		}
+
+		public JobController(IMapper mapper, IInterviewServices @object)
+		{
+			this.mapper = mapper;
+			this.@object = @object;
+		}
+
+	
+
 		[AllowAnonymous]
 		[HttpGet("/get-all")]
 		public async Task<IActionResult> GetJobAsync([FromQuery] JobListParams param)

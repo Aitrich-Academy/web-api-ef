@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HireMeNowWebApi.Helpers;
 using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -26,10 +27,14 @@ namespace HireMeNowWebApi.Repositories
 			return interview;
 			
 		}
-		public List<Interview> sheduledInterviewList()
+		public async Task<PagedList<Interview>> sheduledInterviewList(InterviewParams param)
 		{
-			return _context.Interviews.ToList();
-		
+			var query = _context.Interviews
+			   .OrderByDescending(c => c.CreatedDate)
+			   .AsQueryable();
+			return await PagedList<Interview>.CreateAsync(query,
+					param.PageNumber, param.PageSize);
+
 
 		}
 		public void removeInterview(Guid id)

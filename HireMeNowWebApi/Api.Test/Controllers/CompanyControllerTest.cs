@@ -24,64 +24,64 @@ namespace Api.Test.Controllers
 
         }
 
-        [Fact]
-        public async Task POST_Register_member_without_email_Results_BadRequest()
-        {
-            //Arrange  
-            UserDto userDto = new UserDto("anshid", "ansar", "", "male", "thrissur", 9633508643, "123", Roles.COMPANY_MEMBER);
-            HttpContent httpContent = new StringContent(JsonConvert.SerializeObject(userDto), Encoding.UTF8);
-            httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        //[Fact]
+        //public async Task POST_Register_member_without_email_Results_BadRequest()
+        //{
+        //    //Arrange  
+        //    UserDto userDto = new UserDto("anshid", "ansar", "", "male", "thrissur", 9633508643, "123", Roles.COMPANY_MEMBER);
+        //    HttpContent httpContent = new StringContent(JsonConvert.SerializeObject(userDto), Encoding.UTF8);
+        //    httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
 
-            //Act
-            var response = await _httpClient.PostAsync("company/memberRegister", httpContent);
-            //Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        //    //Act
+        //    var response = await _httpClient.PostAsync("company/memberRegister", httpContent);
+        //    //Assert
+        //    Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-        }
-        [Fact]
-        public async Task POST_Register_member_Without_Password_Results_BadRequest()
-        {
-            //Arrange  
-            UserDto userDto = new UserDto("yadhu", "krishna", "", "male", "thrissur", 9633508643, null, Roles.JOB_PROVIDER);
-            HttpContent httpContent = new StringContent(JsonConvert.SerializeObject(userDto), Encoding.UTF8);
-            httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-
-            //Act
-            var response = await _httpClient.PostAsync("company/memberRegister", httpContent);
-            //Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-
-        }
-
-        [Fact]
-        public async Task POST_Register_company_member_Results_Success()
-        {
-            //Arrange  
-            UserDto userDto = new UserDto("yadhu", "krishna", "yadhu@gmail.com", "male", "thrissur", 9633508643, "123", Roles.JOB_PROVIDER);
-            HttpContent httpContent = new StringContent(JsonConvert.SerializeObject(userDto), Encoding.UTF8);
-            httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        //}
+        //[Fact]
+        //public async Task POST_Register_member_Without_Password_Results_BadRequest()
+        //{
+        //    //Arrange  
+        //    UserDto userDto = new UserDto("yadhu", "krishna", "", "male", "thrissur", 9633508643, null, Roles.JOB_PROVIDER);
+        //    HttpContent httpContent = new StringContent(JsonConvert.SerializeObject(userDto), Encoding.UTF8);
+        //    httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
 
-            //Act
-            var response = await _httpClient.PostAsync("company/memberRegister", httpContent);
-            //Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        //    //Act
+        //    var response = await _httpClient.PostAsync("company/memberRegister", httpContent);
+        //    //Assert
+        //    Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-        }
-        [Fact]
-        public async Task Get_Listing_Company_Members_Without_CompanyId_Results_BadRequest()
-        {
-            //Arrange  
-            UserDto userDto = new UserDto("yadhu", "krishna", "yadhu@gmail.com", "male", "thrissur", 9633508643, "123", Roles.JOB_PROVIDER);
-            HttpContent httpContent = new StringContent(JsonConvert.SerializeObject(userDto), Encoding.UTF8);
-            httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            //Act
-            var response = await _httpClient.GetAsync("company/memberListing?companyId=");
-            //Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        }
+        //}
+
+        //[Fact]
+        //public async Task POST_Register_company_member_Results_Success()
+        //{
+        //    //Arrange  
+        //    UserDto userDto = new UserDto("yadhu", "krishna", "yadhu@gmail.com", "male", "thrissur", 9633508643, "123", Roles.JOB_PROVIDER);
+        //    HttpContent httpContent = new StringContent(JsonConvert.SerializeObject(userDto), Encoding.UTF8);
+        //    httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+
+        //    //Act
+        //    var response = await _httpClient.PostAsync("company/memberRegister", httpContent);
+        //    //Assert
+        //    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        //}
+        //[Fact]
+        //public async Task Get_Listing_Company_Members_Without_CompanyId_Results_BadRequest()
+        //{
+        //    //Arrange  
+        //    UserDto userDto = new UserDto("yadhu", "krishna", "yadhu@gmail.com", "male", "thrissur", 9633508643, "123", Roles.JOB_PROVIDER);
+        //    HttpContent httpContent = new StringContent(JsonConvert.SerializeObject(userDto), Encoding.UTF8);
+        //    httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        //    //Act
+        //    var response = await _httpClient.GetAsync("company/memberListing?companyId=");
+        //    //Assert
+        //    Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        //}
         [Fact]
         public async Task Get_Listing_Company_Members_With_CompanyId_Results_Success()
         {

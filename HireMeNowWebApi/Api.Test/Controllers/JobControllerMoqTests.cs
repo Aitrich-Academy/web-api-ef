@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using HireMeNowWebApi.Models;
 using HireMeNowWebApi.Dtos;
 using HireMeNowWebApi.Data.UnitOfWorks;
+using HireMeNowWebApi.Data.Repositories;
+using HireMeNowWebApi.Services;
 
 namespace Api.Test.Controllers
 {
@@ -21,6 +23,8 @@ namespace Api.Test.Controllers
 	{
 		//private readonly Mock<IJobRepository> _mockRepo;
 		private readonly Mock<IUnitOfWork> _mockUnitOfWorkRepo;
+		private readonly Mock<IJobRepository> _jobRepository;
+		private readonly Mock<IJobService> _jobService;
 		private readonly JobController _controller;
 		private readonly IMapper _mapper;
 		private readonly JobDto jobdto= new JobDto {Id=new Guid("ed3d8914-a950-4f51-0275-08db82d180bf"), Title="Phython Developer", Description= "Senior dotnet developer .", Location= "kochi", TypeOfWork= "Fulltime", Salary= "100000-300000", CompanyId= new Guid("62ec44fb-9f30-4f45-8e3d-f3751998af89") };
@@ -34,12 +38,14 @@ namespace Api.Test.Controllers
 		{
 			//_mockRepo = new Mock<IJobRepository>();
 			_mockUnitOfWorkRepo=new Mock<IUnitOfWork>();
+			_jobRepository=new Mock<IJobRepository>();
+			_jobService=new Mock<IJobService>();
 			var configurationProvider = new MapperConfiguration(cfg =>
 			{
 				cfg.AddProfile<AutoMapperProfiles>();
 			});
 			_mapper = configurationProvider.CreateMapper();
-			_controller = new JobController(_mapper, _mockUnitOfWorkRepo.Object);
+			_controller = new JobController(_mapper, _mockUnitOfWorkRepo.Object, _jobService.Object,_jobRepository.Object);
 
 		}
 
@@ -49,6 +55,7 @@ namespace Api.Test.Controllers
 		{
 			//Arrange  
 			JobListParams param =new JobListParams();
+			//param.JobTitle = "Developer";
 			var listdata =  new PagedList<Job>(jobs, jobs.Count, param.PageNumber, param.PageSize);
 			_mockUnitOfWorkRepo.Setup(repo => repo.JobRepository.GetAllByFilter(param)).ReturnsAsync(listdata);
 
