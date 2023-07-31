@@ -1,9 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HireMeNowWebApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HireMeNowWebApi.Helpers
 {
 	public class PagedList<T> : List<T>
 	{
+		private Interview interview;
+		private object count;
+		private int pageNumber;
+
 		public PagedList(IEnumerable<T> items, int count, int pageNumber, int pageSize)
 		{
 			CurrentPage = pageNumber;
@@ -11,6 +16,14 @@ namespace HireMeNowWebApi.Helpers
 			PageSize = pageSize;
 			TotalCount = count;
 			AddRange(items);
+		}
+
+		public PagedList(Interview interview, object count, int pageNumber, int pageSize)
+		{
+			this.interview = interview;
+			this.count = count;
+			this.pageNumber = pageNumber;
+			PageSize = pageSize;
 		}
 
 		public int CurrentPage { get; set; }

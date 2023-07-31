@@ -11,7 +11,7 @@ namespace HireMeNowWebApi.Dtos
         public string? LastName { get; set; }
         //[Required]
         [EmailAddress]
-        public string? Email { get; set; }
+		public string? Email { get; set; } = null!;
         public string? Gender { get; set; }
         public string? Location { get; set; }
         public long? Phone { get; set; }
@@ -30,7 +30,7 @@ namespace HireMeNowWebApi.Dtos
         {
             
         }
-        public UserDto(string firstName, string lastName, string email, string gender, string? location, long phone,string image, string password, Roles role)
+        public UserDto(string firstName, string lastName, string email, string gender, string? location, long phone, string password, Roles role)
         {
             FirstName=firstName;
             LastName=lastName;

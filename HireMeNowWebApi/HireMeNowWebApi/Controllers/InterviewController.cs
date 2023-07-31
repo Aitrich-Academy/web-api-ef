@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HireMeNowWebApi.Dtos;
 using HireMeNowWebApi.Enums;
+using HireMeNowWebApi.Helpers;
 using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
 using HireMeNowWebApi.Services;
@@ -21,12 +22,23 @@ namespace HireMeNowWebApi.Controllers
 
 		private readonly IInterviewServices _interviewService;
 		private readonly IMapper _mapper;
+		private IInterviewServices @object;
 
-		public InterviewController(IInterviewServices interviewService, IMapper mapper)
+		public InterviewController(IMapper mapper,InterviewServices interviewService)
 		{
 			_interviewService = interviewService;
 			_mapper = mapper;
 		}
+
+		public InterviewController(IMapper mapper, IInterviewServices @object)
+		{
+			_mapper = mapper;
+			this.@object = @object;
+		}
+
+		
+
+
 		[HttpPost("/interview/interviewShedule")]
 		public IActionResult InterviewShedule(InterviewDto interviews)
 		{
@@ -35,10 +47,10 @@ namespace HireMeNowWebApi.Controllers
 			return Ok(_interviewService.sheduleinterview(interview));
 		}
 		[HttpGet("/interviewSheduledlist")]
-		public IActionResult InterviewSheduledList()
+		public  async Task<IActionResult> InterviewSheduledList([FromQuery] InterviewParams param)
 		{
-			List<Interview> interviews = _interviewService.sheduledInterviewList();
-			return Ok(interviews);
+			var interviews = await _interviewService.sheduledInterviewList(param);
+			return Ok(_mapper.Map<List<InterviewDto>>(interviews));
 
 		}
 		[HttpDelete("{id}")]

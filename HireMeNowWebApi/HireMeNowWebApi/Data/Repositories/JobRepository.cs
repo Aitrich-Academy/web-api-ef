@@ -59,6 +59,7 @@ namespace HireMeNowWebApi.Data.Repositories
 		}
         public async Task<PagedList<Job>> GetAllByFilter(JobListParams jobListParams)
         {
+            // Making queryable
 			var query = _context.Jobs
 			   .OrderByDescending(c => c.CreatedDate)
 			   //.ProjectTo<Job>(_mapper.ConfigurationProvider)
