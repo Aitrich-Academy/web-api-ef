@@ -7,7 +7,8 @@
         public string? Email { get; set; }
         public string? Website { get; set; }
         public string? Phone { get; set; }
-        public string? Image { get; set; }
+      
+        public byte[]? Logo { get; set; }
 		public IFormFile? ImageFile { get; set; }
 		public string? About { get; set; }
         public string? Vision { get; set; }
@@ -19,14 +20,14 @@
         {
             
         }
-        public CompanyDto(string? name, string? email, string? website, string? phone, string? image, string? about, string? vision, string? mission, string? location, string? address, Guid? id = null)
+        public CompanyDto(string? name, string? email, string? website, string? phone, byte[]? image, string? about, string? vision, string? mission, string? location, string? address, Guid? id = null)
         {
             Id=id??new Guid();
             Name=name;
             Email=email;
             Website=website;
             Phone=phone;
-            Image=image;
+            Logo = image;
             About=about;
             Vision=vision;
             Mission=mission;

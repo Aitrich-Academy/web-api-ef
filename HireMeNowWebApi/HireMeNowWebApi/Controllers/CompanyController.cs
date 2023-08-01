@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using HireMeNowWebApi.Data.UnitOfWorks;
 using HireMeNowWebApi.Dtos;
+using HireMeNowWebApi.Extensions;
+using HireMeNowWebApi.Helpers;
 using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
 using HireMeNowWebApi.Repositories;
@@ -20,17 +22,22 @@ namespace HireMeNowWebApi.Controllers
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
 		private readonly ICompanyService _companyService;
+        public readonly IUnitOfWork _unitofWork;
 
+        public IMapper Mapper { get; }
+        public IUnitOfWork Object { get; }
 
-
-		public CompanyController(IUnitOfWork unitOfWork, IMapper mapper,IUserRepository userRepository,ICompanyService companyService)
+        public CompanyController(IUnitOfWork unitOfWork, IMapper mapper,IUserRepository userRepository,ICompanyService companyService, IUnitOfWork @object)
         {
 			_unitOfWork = unitOfWork;
             _mapper = mapper;
             _userRepository = userRepository;
             _companyService = companyService;
 
+
 		}
+
+      
 
         [HttpPost("/company/memberRegister")]
 		public IActionResult memberRegister(CompanyMemberDto companyMemberDto)
@@ -65,33 +72,33 @@ namespace HireMeNowWebApi.Controllers
         }
 
         [HttpPost("/company/register")]
-        public IActionResult RegisterCompany(CompanyDto companyDto)
+        public async Task<IActionResult> RegisterCompany([FromForm]CompanyRegDto companyRegDto)
         {
-            if (_userRepository.IsUserExist(companyDto.Email))
+            if (_unitOfWork.CompanyRepository.IsUserExist(companyRegDto.Email))
             {
                 return BadRequest("User Already Exist");
             }
             else
             {
-                Company company = _mapper.Map<Company>(companyDto);
-                return Ok(_unitOfWork.CompanyRepository.Register(company));
+                Company company = _mapper.Map<Company>(companyRegDto);
+                _unitOfWork.CompanyRepository.Register(company);
+                await _unitOfWork.Complete();
+                return Created("", companyRegDto);
+               
             }
        
            
         }
 
         [HttpGet("/company/list")]
-        public IActionResult GetAllCompany(Guid? id = null,string? name=null)
+        public async Task<IActionResult> GetAllCompany([FromQuery] CompanyListParams param)
         {
-            if (id == null)
-            {
-                List<Company> companies = _unitOfWork.CompanyRepository.getAllCompanies(name);
-                return Ok(companies);
-            }
-            else
-            {
-                return Ok(_unitOfWork.CompanyRepository.getById(id.Value));
-            }
+
+            var companylist = await _unitOfWork.CompanyRepository.GetAllByFilter(param);
+            //Response.AddPaginationHeader(companylist.CurrentPage, companylist.PageSize, companylist.TotalCount, companylist.TotalPages);
+            List<CompanyDto> company = _mapper.Map<List<CompanyDto>>(companylist);
+            return Ok(company);
+           
         }
 
         [HttpPut("/company/profile")]
@@ -102,9 +109,9 @@ namespace HireMeNowWebApi.Controllers
                 return BadRequest("Id is required ");
             }
             Company company = _mapper.Map<Company>(companyDto);
-			byte[] byteArray = _unitOfWork.CompanyRepository.ConvertImageToByteArray(companyDto.ImageFile);
+            byte[] byteArray = _unitOfWork.CompanyRepository.ConvertImageToByteArray(companyDto.ImageFile);
             company.Logo = byteArray;
-			Company updatedCompany = _unitOfWork.CompanyRepository.Update(company);
+            Company updatedCompany = _unitOfWork.CompanyRepository.Update(company);
 
             return Ok(_mapper.Map<Company>(updatedCompany));
         }

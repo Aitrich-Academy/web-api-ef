@@ -1,6 +1,9 @@
-﻿using HireMeNowWebApi.Exceptions;
+﻿using HireMeNowWebApi.Enums;
+using HireMeNowWebApi.Exceptions;
+using HireMeNowWebApi.Helpers;
 using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HireMeNowWebApi.Repositories
 {
@@ -73,5 +76,27 @@ namespace HireMeNowWebApi.Repositories
 
             return indexToUpdate;
         }
+        public async Task<PagedList<Company>> GetAllByFilter(CompanyListParams companyListParams)
+        {
+            var query = context.Companies
+               .OrderByDescending(c => c.CreatedDate)
+               //.ProjectTo<Job>(_mapper.ConfigurationProvider)
+               .AsQueryable();
+
+           
+            if (companyListParams.Name != null)
+            {
+                query = query.Where(c => c.Name.Contains(companyListParams.Name));
+            }
+
+
+            return await PagedList<Company>.CreateAsync(query,
+                companyListParams.PageNumber, companyListParams.PageSize);
+        }
+        public bool IsUserExist(string email)
+        {
+            return context.Companies.Where(e => e.Email == email).ToList().Count > 0;
+        }
     }
+
 }

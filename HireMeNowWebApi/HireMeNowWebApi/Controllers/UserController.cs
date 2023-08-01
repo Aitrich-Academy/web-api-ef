@@ -56,7 +56,7 @@ namespace HireMeNowWebApi.Controllers
             
             return Ok(_userService.GetCurrentUser());
         }
-      
+        [AllowAnonymous]
 		[HttpPut("/account/profile")]
         public async Task<IActionResult> UpdateProfile([FromForm] UserDto userDto)
         {
@@ -70,7 +70,7 @@ namespace HireMeNowWebApi.Controllers
 			userToUpdate.Image = byteArray;
 ;			User user =await _userService.UpdateAsync(userToUpdate);
            
-            return Ok(_mapper.Map<UserDto>(User));
+            return Ok(_mapper.Map<UserDto>(user));
         }
 	
 
