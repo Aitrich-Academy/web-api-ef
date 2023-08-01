@@ -28,17 +28,12 @@ namespace HireMeNowWebApi.Controllers
 		private readonly IMapper _mapper;
 		private readonly IUnitOfWork _unitOfWork;
 		IJobRepository _jobRepository;
-		private IMapper mapper;
-		private IInterviewServices @object;
+        private IMapper mapper;
+        private IUnitOfWork @object;
 
-	
+        // GET: api/<JobController>
 
-
-
-
-		// GET: api/<JobController>
-
-		public JobController(IMapper mapper, IUnitOfWork unitOfWork,IJobService jobService,IJobRepository jobRepostory)
+        public JobController(IMapper mapper, IUnitOfWork unitOfWork,IJobService jobService,IJobRepository jobRepostory)
         {
 			
 			_mapper= mapper;
@@ -49,16 +44,14 @@ namespace HireMeNowWebApi.Controllers
 
 		}
 
-		public JobController(IMapper mapper, IInterviewServices @object)
-		{
-			this.mapper = mapper;
-			this.@object = @object;
-		}
+        public JobController(IMapper mapper, IUnitOfWork @object, IUnitOfWork? unitOfWork)
+        {
+            this.mapper = mapper;
+            this.@object = @object;
+        }
 
-	
-
-		[AllowAnonymous]
-		[HttpGet("/get-all")]
+        [AllowAnonymous]
+		[HttpGet("/jobs")]
 		public async Task<IActionResult> GetJobAsync([FromQuery] JobListParams param)
 		{
 			//if (param.JobType < 0 || param.JobType  > 4) return BadRequest("Invalid Message Type");
@@ -71,7 +64,7 @@ namespace HireMeNowWebApi.Controllers
 		//[HttpGet("/job/GetJobListByid")]
 		[AllowAnonymous]
 		[HttpGet]
-		[Route("/{jobid}")]
+		[Route("jobs/{jobid}")]
 		public IActionResult GetJob(Guid jobid)
 		{
 			Job job = _unitOfWork.JobRepository.GetJobById(jobid);
@@ -98,8 +91,8 @@ namespace HireMeNowWebApi.Controllers
 		//}
 
 		//// POST api/<JobController>
-		[HttpPost("/addjob")]
-
+		[AllowAnonymous]
+		[HttpPost]
 		public async Task<IActionResult> PostJobAsync(JobDto jobDto)
 		{
 			var job = _mapper.Map<Job>(jobDto);
@@ -110,10 +103,9 @@ namespace HireMeNowWebApi.Controllers
 		}
 
 		//// PUT api/<JobController>/5
-
-		[HttpPut("JobUpdate/{id}")]
-	
-
+		[AllowAnonymous]
+		[HttpPut]
+		[Route("job/{id}")]
 		public async Task<IActionResult> Update(JobDto jobdto,Guid id)
 		{
 			jobdto.Id=id;

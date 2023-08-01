@@ -14,8 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using HireMeNowWebApi.Models;
 using HireMeNowWebApi.Dtos;
 using HireMeNowWebApi.Data.UnitOfWorks;
-using HireMeNowWebApi.Data.Repositories;
 using HireMeNowWebApi.Services;
+using HireMeNowWebApi.Data.Repositories;
 
 namespace Api.Test.Controllers
 {
@@ -27,30 +27,33 @@ namespace Api.Test.Controllers
 		private readonly Mock<IJobService> _jobService;
 		private readonly JobController _controller;
 		private readonly IMapper _mapper;
-		private readonly JobDto jobdto= new JobDto {Id=new Guid("ed3d8914-a950-4f51-0275-08db82d180bf"), Title="Phython Developer", Description= "Senior dotnet developer .", Location= "kochi", TypeOfWork= "Fulltime", Salary= "100000-300000", CompanyId= new Guid("62ec44fb-9f30-4f45-8e3d-f3751998af89") };
+        private readonly IUnitOfWork unitOfWork;
+       private readonly IJobRepository jobRepostory;
+
+        private readonly IJobService jobService;
+        IJobRepository _jobRepository;
+        private readonly JobDto jobdto= new JobDto {Id=new Guid("ed3d8914-a950-4f51-0275-08db82d180bf"), Title="Phython Developer", Description= "Senior dotnet developer .", Location= "kochi", TypeOfWork= "Fulltime", Salary= "100000-300000", CompanyId= new Guid("62ec44fb-9f30-4f45-8e3d-f3751998af89") };
 		
 		private readonly List<Job> jobs = new List<Job> {
 				new Job{Id=new Guid("7163744e-eb8d-45a4-82a8-2c7816f4526d"),Title="Dotnet Developer",Description= "Senior dotnet developer .",Location= "kochi",JobType= "Fulltime",Salary= "100000-300000",CompanyId= new Guid("62ec44fb-9f30-4f45-8e3d-f3751998af89") },
 				new Job{Id=new Guid("8e0095ce-f90c-4f03-003f-08db844f473f"),Title="Java Developer",Description= "Senior dotnet developer .",Location= "kochi",JobType= "Fulltime",Salary= "100000-300000",CompanyId= new Guid("62ec44fb-9f30-4f45-8e3d-f3751998af89") },
 				new Job{Id=new Guid("e86a5bb8-3c03-4591-b214-8087dd605da5"),Title="Angular Developer",Description= "Senior dotnet developer .",Location= "kochi",JobType= "Fulltime",Salary= "100000-300000",CompanyId= new Guid("62ec44fb-9f30-4f45-8e3d-f3751998af89") } };
 
-		public JobControllerMoqTests()
-		{
-			//_mockRepo = new Mock<IJobRepository>();
-			_mockUnitOfWorkRepo=new Mock<IUnitOfWork>();
-			_jobRepository=new Mock<IJobRepository>();
-			_jobService=new Mock<IJobService>();
-			var configurationProvider = new MapperConfiguration(cfg =>
-			{
-				cfg.AddProfile<AutoMapperProfiles>();
-			});
-			_mapper = configurationProvider.CreateMapper();
-			_controller = new JobController(_mapper, _mockUnitOfWorkRepo.Object, _jobService.Object,_jobRepository.Object);
-
-		}
+		public JobControllerMoqTests(IJobRepository jobRepository)
+        {
+            //_mockRepo = new Mock<IJobRepository>();
+            _mockUnitOfWorkRepo = new Mock<IUnitOfWork>();
+            var configurationProvider = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfiles>();
+            });
+            _mapper = configurationProvider.CreateMapper();
+            _controller = new JobController(_mapper, _mockUnitOfWorkRepo.Object, jobService, jobRepostory);
+          
+        }
 
 
-		[Fact]
+        [Fact]
 		public async Task GET_Jobs_Results_Success_Count_3()
 		{
 			//Arrange  

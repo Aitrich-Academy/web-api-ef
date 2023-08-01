@@ -21,6 +21,7 @@ namespace HireMeNowWebApi.Helpers
             CreateMap<JobDto,Job>().ReverseMap();
 			CreateMap<CompanyMemberDto, User>().ReverseMap();
             CreateMap<ApplicationDto, Application>().ReverseMap();
+            CreateMap<CompanyRegDto, Company>().ReverseMap();
         }
 	}
 }

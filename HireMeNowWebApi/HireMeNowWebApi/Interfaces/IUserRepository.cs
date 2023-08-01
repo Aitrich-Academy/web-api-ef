@@ -11,7 +11,7 @@ namespace HireMeNowWebApi.Interfaces
 		Task<User> Update(User user);
 		Task<User> memberRegister(User user);
         List<User> memberListing(Guid companyId);
-
+        byte[] ConvertImageToByteArray(IFormFile image);
         List<User> getAllUsers();
 		byte[] ConvertImageToByteArray(IFormFile image);
 		void memberDeleteById(Guid id);

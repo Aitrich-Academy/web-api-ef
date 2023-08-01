@@ -9,22 +9,20 @@ namespace HireMeNowWebApi.Dtos
         public Guid Id { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        //[Required]
+        [Required]
         [EmailAddress]
-		public string? Email { get; set; } = null!;
+        public string Email { get; set; }
         public string? Gender { get; set; }
         public string? Location { get; set; }
         public long? Phone { get; set; }
-		//[Required]
-		public byte[]? Image { get; set; }
-		public string? Password { get; set; }
-	
-		public IFormFile? ImageFile { get; set; }
-		public Roles? Role { get; set; }
-		public string? About { get; set; }
+        [Required]
+        public string Password { get; set; }
+      
+        public Roles Role { get; set; }
+        public IFormFile? ImageFile { get; set; }
 
 
-		public string? Token { get; set; }
+        public string? Token { get; set; }
 
 		public UserDto()
         {
@@ -38,7 +36,6 @@ namespace HireMeNowWebApi.Dtos
             Gender=gender;
             Location=location;
             Phone=phone;
-            //Image = image;
             Password=password;
             Role=role;
         }
