@@ -68,7 +68,7 @@ namespace HireMeNowWebApi.Controllers
 
             byte[] byteArray = _unitOfWork.UserRepository.ConvertImageToByteArray(userDto.ImageFile);
 			userToUpdate.Image = byteArray;
-;			User user =await _userService.UpdateAsync(userToUpdate);
+	var user =await _userService.UpdateAsync(userToUpdate);
            
             return Ok(_mapper.Map<UserDto>(user));
         }

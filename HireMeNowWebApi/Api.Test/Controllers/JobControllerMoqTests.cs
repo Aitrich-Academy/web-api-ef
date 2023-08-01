@@ -23,6 +23,8 @@ namespace Api.Test.Controllers
 	{
 		//private readonly Mock<IJobRepository> _mockRepo;
 		private readonly Mock<IUnitOfWork> _mockUnitOfWorkRepo;
+		private readonly Mock<IJobRepository> _jobRepository;
+		private readonly Mock<IJobService> _jobService;
 		private readonly JobController _controller;
 		private readonly IMapper _mapper;
         private readonly IUnitOfWork unitOfWork;
@@ -56,6 +58,7 @@ namespace Api.Test.Controllers
 		{
 			//Arrange  
 			JobListParams param =new JobListParams();
+			//param.JobTitle = "Developer";
 			var listdata =  new PagedList<Job>(jobs, jobs.Count, param.PageNumber, param.PageSize);
 			_mockUnitOfWorkRepo.Setup(repo => repo.JobRepository.GetAllByFilter(param)).ReturnsAsync(listdata);
 

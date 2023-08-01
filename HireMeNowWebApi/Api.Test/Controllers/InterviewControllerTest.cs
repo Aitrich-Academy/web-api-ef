@@ -24,16 +24,16 @@ namespace Api.Test.Controllers
 		[Fact]
 		public async Task POST_interview_Shedule_Success()
 		{
-			//Arrange  
-			//InterviewDto interviewdto = new InterviewDto(Guid.NewGuid(),"TCS", "Senior dotnet developer", "10/12/2023", "TCR","10.00");
-			//HttpContent httpContent = new StringContent(JsonConvert.SerializeObject(interviewdto), Encoding.UTF8);
-			//httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+		
+			InterviewDto interviewdto = new  InterviewDto { Id = new Guid("ed3d8914-a950-4f51-0275-08db82d180bf"), JobId = new Guid("02eeda07-ba04-4a92-052c-08db88e79a77"), CompanyId = new Guid("2c8303fb-c1e1-4fa6-a2e1-272472b4beb5"), Date = new DateTime(2023, 07, 28, 12, 30, 0), Location = "Padinjarangadi", Time = "10:11:00" };
+			HttpContent httpContent = new StringContent(JsonConvert.SerializeObject(interviewdto), Encoding.UTF8);
+			httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
 
-			////Act
-			//var response = await _httpClient.PostAsync("interview/interviewShedule", httpContent);
-			////Assert
-			//Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+			//Act
+			var response = await _httpClient.PostAsync("interview/interviewShedule", httpContent);
+			//Assert
+			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
 
 		}

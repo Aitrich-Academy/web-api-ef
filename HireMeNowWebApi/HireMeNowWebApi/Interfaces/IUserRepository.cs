@@ -13,8 +13,8 @@ namespace HireMeNowWebApi.Interfaces
         List<User> memberListing(Guid companyId);
         byte[] ConvertImageToByteArray(IFormFile image);
         List<User> getAllUsers();
-
-        void memberDeleteById(Guid id);
+		byte[] ConvertImageToByteArray(IFormFile image);
+		void memberDeleteById(Guid id);
 		bool IsUserExist(string email);
 	}
 }

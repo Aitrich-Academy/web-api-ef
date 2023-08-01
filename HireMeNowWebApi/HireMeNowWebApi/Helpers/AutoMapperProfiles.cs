@@ -10,7 +10,9 @@ namespace HireMeNowWebApi.Helpers
         {
             CreateMap<UserDto, User>().ReverseMap();
 			CreateMap<UserProfileDto, User>().ReverseMap();
-			CreateMap<InterviewDto, Interview>().ReverseMap();
+			CreateMap<Interview,InterviewDto>(). 
+				ForMember(dest => dest.Time, opt => opt.MapFrom(src =>
+				  (src.Time.ToString()))); ;
 			CreateMap<InterviewDto, Interview>()
 				 .ForMember(dest => dest.Time, opt => opt.MapFrom(src =>
 				  TimeSpan.Parse(src.Time)));

@@ -1,11 +1,12 @@
-﻿using HireMeNowWebApi.Models;
+﻿using HireMeNowWebApi.Helpers;
+using HireMeNowWebApi.Models;
 
 namespace HireMeNowWebApi.Interfaces
 {
 	public interface IInterviewServices
 	{
 		Interview sheduleinterview(Interview interview);
-		List<Interview> sheduledInterviewList();
+		Task<PagedList<Interview>> sheduledInterviewList(InterviewParams param);
 		void removeInterview(Guid id);
 
 	}
