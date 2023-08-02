@@ -41,7 +41,7 @@ namespace Api.Test.Controllers
                 cfg.AddProfile<AutoMapperProfiles>();
             });
             _mapper = configurationProvider.CreateMapper();
-            _controller = new CompanyController(_mockUnitOfWorkRepo.Object, _mapper, _userRepository, _companyService,_mockUnitOfWorkRepo.Object);
+            _controller = new CompanyController(_mockUnitOfWorkRepo.Object, _mapper, _userRepository, _companyService);
 
         }
         [Fact]

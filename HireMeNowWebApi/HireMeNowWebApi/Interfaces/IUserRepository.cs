@@ -1,4 +1,5 @@
-﻿using HireMeNowWebApi.Models;
+﻿using HireMeNowWebApi.Helpers;
+using HireMeNowWebApi.Models;
 
 namespace HireMeNowWebApi.Interfaces
 {
@@ -13,8 +14,8 @@ namespace HireMeNowWebApi.Interfaces
         List<User> memberListing(Guid companyId);
         byte[] ConvertImageToByteArray(IFormFile image);
         List<User> getAllUsers();
-		byte[] ConvertImageToByteArray(IFormFile image);
-		void memberDeleteById(Guid id);
+        Task<PagedList<User>> GetAllByFilter(UserListParams userListParams);
+        void memberDeleteById(Guid id);
 		bool IsUserExist(string email);
 	}
 }

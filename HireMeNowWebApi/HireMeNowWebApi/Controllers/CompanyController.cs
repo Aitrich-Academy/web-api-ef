@@ -27,10 +27,10 @@ namespace HireMeNowWebApi.Controllers
         public IMapper Mapper { get; }
         public IUnitOfWork Object { get; }
 
-        public CompanyController(IUnitOfWork unitOfWork, IMapper mapper,IUserRepository userRepository,ICompanyService companyService, IUnitOfWork @object)
+        public CompanyController(IUnitOfWork unitOfWork, IMapper mapper,IUserRepository userRepository,ICompanyService companyService)
         {
-			_unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+                _mapper = mapper;
             _userRepository = userRepository;
             _companyService = companyService;
 

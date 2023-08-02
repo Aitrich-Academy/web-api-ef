@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HireMeNowWebApi.Enums;
 using HireMeNowWebApi.Exceptions;
+using HireMeNowWebApi.Helpers;
 using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -20,12 +21,12 @@ namespace HireMeNowWebApi.Repositories
 			this.mapper=mapper;
 		}
 
-		//{ new User( "jobprovider", "", "jobprovider@gmail.com", 123, "123", Roles.JobProvider,new Guid("ae32ba86-8e8d-4615-aa47-7387159e705d"),new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6")),
-		// new User( "Yadhu", "", "yadhu.aitrich@gmail.com", 123, "123", Roles.JobSeeker,null,new Guid("1d8303fb-c1e1-4fa6-a2e1-272472b2beb4")),
-		// new User( "rs", "", "sad@gmail.com", 123, "123", Roles.CompanyMember,new Guid("1d8303fb-c1e1-4fa6-a2e1-272472b2beb4")),
-		//    new User( "arun", "", "arun@gmail.com", 123, "123", Roles.Admin)};
+        //{ new User( "jobprovider", "", "jobprovider@gmail.com", 123, "123", Roles.JobProvider,new Guid("ae32ba86-8e8d-4615-aa47-7387159e705d"),new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6")),
+        // new User( "Yadhu", "", "yadhu.aitrich@gmail.com", 123, "123", Roles.JobSeeker,null,new Guid("1d8303fb-c1e1-4fa6-a2e1-272472b2beb4")),
+        // new User( "rs", "", "sad@gmail.com", 123, "123", Roles.CompanyMember,new Guid("1d8303fb-c1e1-4fa6-a2e1-272472b2beb4")),
+        //    new User( "arun", "", "arun@gmail.com", 123, "123", Roles.Admin)};
 
-		public User getById(Guid userId)
+        public User getById(Guid userId)
         {
            User user= context.Users.Where(e =>e.Id==userId).Include(e=>e.Skills).FirstOrDefault();
             return user;
@@ -118,6 +119,24 @@ namespace HireMeNowWebApi.Repositories
 		{
             return context.Users.ToList();
 		}
+        public async Task<PagedList<User>> GetAllByFilter(UserListParams userListParams)
+        {
+            // Making queryable
+            var query = context.Users
+               .OrderByDescending(c => c.CreatedDate)
+               //.ProjectTo<Job>(_mapper.ConfigurationProvider)
+               .AsQueryable();
+
+           
+            if (userListParams.Name != null)
+            {
+                query = query.Where(c => c.FirstName.Contains(userListParams.Name));
+            }
+
+
+            return await PagedList<User>.CreateAsync(query,
+                userListParams.PageNumber, userListParams.PageSize);
+        }
 
         public void memberDeleteById(Guid id)
         {
@@ -142,7 +161,8 @@ namespace HireMeNowWebApi.Repositories
 				return memoryStream.ToArray();
 			}
 		}
-	}
+       
+    }
 
     
 

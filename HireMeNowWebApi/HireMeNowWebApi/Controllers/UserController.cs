@@ -3,6 +3,8 @@ using HireMeNowWebApi.Data.UnitOfWorks;
 using HireMeNowWebApi.Dtos;
 using HireMeNowWebApi.Enums;
 using HireMeNowWebApi.Exceptions;
+using HireMeNowWebApi.Extensions;
+using HireMeNowWebApi.Helpers;
 using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -20,7 +22,8 @@ namespace HireMeNowWebApi.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 		private readonly IUnitOfWork _unitOfWork;
-		public UserController(IUserService userService, IMapper mapper, IUnitOfWork unitOfWork)
+
+        public UserController(IUserService userService, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _userService=userService;
             _mapper=mapper;
@@ -75,17 +78,17 @@ namespace HireMeNowWebApi.Controllers
 	
 
 		[HttpGet("/account/getAllUsers")]
-		public IActionResult getAllUsers()
-		{
-            List<User> users = _userService.getAllUsers();
-            List<UserDto> users1 = _mapper.Map<List<UserDto>>(users);
+        public async Task<IActionResult> GetUserAsync([FromQuery] UserListParams  param)
+        {
+           var userslist =await _unitOfWork.UserRepository.GetAllByFilter(param);
+            //Response.AddPaginationHeader(userslist.CurrentPage,
+            //                             userslist.PageSize,
+            //                             userslist.TotalCount,
+            //                             jobslist.TotalPages);
+            List<UserDto> users = _mapper.Map<List<UserDto>>(userslist);
+            return Ok(users);
 
-            if (users == null)
-			{
-				return BadRequest("Not Found.");
-			
-			}
-			return Ok(users1);
+           
 		}
 	
 		[HttpGet("/account/getbyId")]
@@ -100,5 +103,10 @@ namespace HireMeNowWebApi.Controllers
 			}
 			return Ok(user1);
 		}
-	}
+
+        public static implicit operator UserController(JobController v)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
