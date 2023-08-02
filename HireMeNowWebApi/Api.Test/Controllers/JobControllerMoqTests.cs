@@ -31,7 +31,7 @@ namespace Api.Test.Controllers
        private readonly IJobRepository jobRepostory;
 
         private readonly IJobService jobService;
-        IJobRepository _jobRepository;
+    
         private readonly JobDto jobdto= new JobDto {Id=new Guid("ed3d8914-a950-4f51-0275-08db82d180bf"), Title="Phython Developer", Description= "Senior dotnet developer .", Location= "kochi", TypeOfWork= "Fulltime", Salary= "100000-300000", CompanyId= new Guid("62ec44fb-9f30-4f45-8e3d-f3751998af89") };
 		
 		private readonly List<Job> jobs = new List<Job> {
