@@ -30,12 +30,14 @@ public partial class HireMeNowDbContext : DbContext
     public virtual DbSet<Skill> Skills { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Message> Messages { get; set; }
+    public virtual DbSet<MessageGroup> MessageGroups { get; set; }
 
-	//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-	//        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-EV8O311;Initial Catalog=JobPortalDB;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=true;");
+    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+    //        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-EV8O311;Initial Catalog=JobPortalDB;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=true;");
 
-	protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 
 		modelBuilder.Entity<Application>(entity =>
@@ -55,6 +57,7 @@ public partial class HireMeNowDbContext : DbContext
 			entity.HasOne(d => d.User).WithMany(p => p.Applications)
 				.HasForeignKey(d => d.UserId)
 				.HasConstraintName("FK__Applicati__UserI__32E0915F");
+
 		});
 
 		modelBuilder.Entity<Company>(entity =>
@@ -284,7 +287,22 @@ public partial class HireMeNowDbContext : DbContext
 			entity.HasOne(d => d.Company).WithMany(p => p.Users)
 				.HasForeignKey(d => d.CompanyId)
 				.HasConstraintName("FK__Users__CreatedDa__2A4B4B5E");
+			//entity.HasMany(d => d.MessageGroups).WithMany(p => p.Users);
+           
+        });
+
+		modelBuilder.Entity<MessageGroup>(entity =>
+		{
+
+			entity.HasMany(d => d.Users).WithMany(p => p.MessageGroups);
+			entity.HasMany(d => d.Messages).WithOne(p => p.MessageGroup)
+			.HasForeignKey(d => d.MessageGroupId);
+
 		});
+
+		//	modelBuilder.Entity<Message>()
+		//.HasOne(m => m.FromUser)
+		//.OnDelete(DeleteBehavior.Restrict);
 
 		OnModelCreatingPartial(modelBuilder);
 	}
@@ -298,7 +316,9 @@ public partial class HireMeNowDbContext : DbContext
 			e.State==EntityState.Modified);
 		foreach(var entry in entries)
 		{
-			if (entry.Entity.GetType() == typeof(Job))
+			if (entry.Entity.GetType() == typeof(Job) ||
+                entry.Entity.GetType() == typeof(Application) ||
+                entry.Entity.GetType() == typeof(Interview))
 			{
 				entry.Property("UpdatedDate").CurrentValue=DateTime.Now;
 				if (entry.State==EntityState.Added)

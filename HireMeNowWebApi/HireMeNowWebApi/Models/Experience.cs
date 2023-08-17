@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace HireMeNowWebApi.Models;
 
@@ -21,6 +22,6 @@ public partial class Experience
     public string? Duration { get; set; }
 
     public string? Year { get; set; }
-
+    [JsonIgnore]
     public virtual User? User { get; set; }
 }

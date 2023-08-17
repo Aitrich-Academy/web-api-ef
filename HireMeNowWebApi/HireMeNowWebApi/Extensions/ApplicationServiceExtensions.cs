@@ -31,13 +31,18 @@ namespace HireMeNowWebApi.Extensions
 			services.AddScoped<ICompanyService, CompanyService>();
 			services.AddScoped<IApplicationService, ApplicationService>();
 			services.AddScoped<IApplicationRepository, ApplicationRepository>();
-
+            services.AddScoped<IChatRepository, ChatRepository>();
+            services.AddScoped<ChatService>();
 			//services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 			//services.AddDbContextPool<HireMeNowDbContext>(options =>
 			//	options.UseSqlServer(config.GetConnectionString("DefaultConnection"))
 			//);
 			//services.AddScoped<HireMeNowDbContext>();
-			return services;
+
+			//Response caching
+			services.AddResponseCaching();
+
+            return services;
 		}
     }
 }

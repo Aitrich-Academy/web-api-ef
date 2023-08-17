@@ -15,8 +15,9 @@ public partial class Interview
 	public Guid? JobId { get; set; }
 	[ForeignKey(nameof(Jobseeker))]
 	public Guid? JobseekerId { get; set; }
-
-	[ForeignKey(nameof(Company))]
+    [ForeignKey(nameof(Application))]
+    public Guid? ApplicationId { get; set; }
+    [ForeignKey(nameof(Company))]
 	public Guid? CompanyId { get; set; }
 	public DateTime? Date { get; set; }
 
@@ -29,6 +30,7 @@ public partial class Interview
 	public Guid? CreatedBy { get; set; }
 
     public DateTime? CreatedDate { get; set; }
+    public DateTime? UpdatedDate { get; set; }
 
     public virtual User? CreatedUser { get; set; }
 
@@ -36,4 +38,5 @@ public partial class Interview
 	public virtual Company? Company { get; set; }
 
 	public virtual User? Jobseeker { get; set; }
+    public virtual Application? Application { get; set; }
 }

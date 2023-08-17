@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace HireMeNowWebApi.Models;
 
@@ -24,6 +25,6 @@ public partial class Qualification
     public string? University { get; set; }
 
     public string? Status { get; set; }
-
+    [JsonIgnore]
     public virtual User? User { get; set; }
 }

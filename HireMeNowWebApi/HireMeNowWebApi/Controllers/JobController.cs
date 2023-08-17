@@ -44,12 +44,6 @@ namespace HireMeNowWebApi.Controllers
 
 		}
 
-        public JobController(IMapper mapper, IUnitOfWork @object, IUnitOfWork? unitOfWork)
-        {
-            this.mapper = mapper;
-            this.@object = @object;
-        }
-
         [AllowAnonymous]
 		[HttpGet("/jobs")]
 		public async Task<IActionResult> GetJobAsync([FromQuery] JobListParams param)
