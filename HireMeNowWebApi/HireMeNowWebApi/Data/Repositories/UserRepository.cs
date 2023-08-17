@@ -20,20 +20,18 @@ namespace HireMeNowWebApi.Repositories
 			this.mapper=mapper;
 		}
 
-		//{ new User( "jobprovider", "", "jobprovider@gmail.com", 123, "123", Roles.JobProvider,new Guid("ae32ba86-8e8d-4615-aa47-7387159e705d"),new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6")),
-		// new User( "Yadhu", "", "yadhu.aitrich@gmail.com", 123, "123", Roles.JobSeeker,null,new Guid("1d8303fb-c1e1-4fa6-a2e1-272472b2beb4")),
-		// new User( "rs", "", "sad@gmail.com", 123, "123", Roles.CompanyMember,new Guid("1d8303fb-c1e1-4fa6-a2e1-272472b2beb4")),
-		//    new User( "arun", "", "arun@gmail.com", 123, "123", Roles.Admin)};
-
+	
 		public User getById(Guid userId)
         {
-           User user= context.Users.Where(e =>e.Id==userId).Include(e=>e.Skills).FirstOrDefault();
+           User user= context.Users.Where(e =>e.Id==userId)
+                .Include(e=>e.Skills)
+                .Include(e => e.Experiences)
+                .Include(e => e.Qualifications).FirstOrDefault();
             return user;
         }
 
         public User GetUserByEmail(string email)
         {
-			//return users.Where(e=>e.Email==email && e.Password==password).FirstOrDefault();
 			return context.Users.FirstOrDefault(e => e.Email==email);
 		}
 
@@ -57,32 +55,42 @@ namespace HireMeNowWebApi.Repositories
 
         public async Task<User> Update(User updatedUser)
         {
-         var usertoUpdate= await context.Users.FirstOrDefaultAsync(item => item.Id == updatedUser.Id);
-            if (usertoUpdate != null)
+            try
             {
-                // Modify the properties of the item at the found index
-                usertoUpdate.About = updatedUser.About ?? usertoUpdate.About;
-                //usertoUpdate.Experiences = updatedUser.Experiences ?? usertoUpdate.Experiences;
-                //usertoUpdate.Educations = updatedUser.Educations ?? usertoUpdate.Educations;
-                usertoUpdate.Image = updatedUser.Image ?? usertoUpdate.Image;
-                usertoUpdate.FirstName = updatedUser.FirstName??usertoUpdate.FirstName;
-                usertoUpdate.LastName = updatedUser.LastName??usertoUpdate.LastName;
-                usertoUpdate.Location = updatedUser.Location??usertoUpdate.Location;
-                usertoUpdate.Gender = updatedUser.Gender??usertoUpdate.Gender;
-                usertoUpdate.Phone = updatedUser.Phone==null?usertoUpdate.Phone : updatedUser.Phone;
-                usertoUpdate.Email = updatedUser.Email == null ? usertoUpdate.Email : updatedUser.Email;
-                
-               
-                context.Users.Update(usertoUpdate);
-				await context.SaveChangesAsync();
+                var usertoUpdate = await context.Users.FirstOrDefaultAsync(item => item.Id == updatedUser.Id);
+                if (usertoUpdate != null)
+                {
+                    // Modify the properties of the item at the found index
+                    usertoUpdate.About = updatedUser.About ?? usertoUpdate.About;
 
-			}
-            else
+                    usertoUpdate.Image = updatedUser.Image ?? usertoUpdate.Image;
+                    usertoUpdate.FirstName = updatedUser.FirstName??usertoUpdate.FirstName;
+                    usertoUpdate.LastName = updatedUser.LastName??usertoUpdate.LastName;
+                    usertoUpdate.Location = updatedUser.Location??usertoUpdate.Location;
+                    usertoUpdate.Gender = updatedUser.Gender??usertoUpdate.Gender;
+                    usertoUpdate.Phone = updatedUser.Phone==null ? usertoUpdate.Phone : updatedUser.Phone;
+                    usertoUpdate.Email = updatedUser.Email == null ? usertoUpdate.Email : updatedUser.Email;
+
+                    //for chat application
+                    //usertoUpdate.ConnectionId = updatedUser.ConnectionId;
+                    //updatedUser.OnlineStatus= updatedUser.OnlineStatus;
+                    //updatedUser.LastActive= updatedUser.LastActive;
+
+
+                    context.Users.Update(usertoUpdate);
+                    await context.SaveChangesAsync();
+
+                }
+                else
+                {
+                    throw new NotFoundException("User Not Found");
+                }
+
+                return usertoUpdate;
+            }catch(Exception ex)
             {
-                throw new NotFoundException("User Not Found");
+                throw ex;
             }
-
-            return usertoUpdate;
         }
 		
 		public async Task<User> memberRegister(User user)
@@ -142,7 +150,47 @@ namespace HireMeNowWebApi.Repositories
 				return memoryStream.ToArray();
 			}
 		}
-	}
+
+        public void AddSkill(Skill skill)
+        {
+            context.Skills.Add(skill);
+            context.SaveChanges();
+        }
+
+        public async Task<List<Skill>> getSkills(Guid userId)
+        {
+          return await context.Skills.Where(e=>e.UserId==userId).ToListAsync();
+        }
+
+        public async Task AddExperience(Experience experience)
+        {
+             context.Experiences.Add(experience);
+            context.SaveChanges();
+        }
+
+        public async Task AddQualification(Qualification qualification)
+        {
+           context.Qualifications.Add(qualification);
+           await context.SaveChangesAsync();
+        }
+
+        public async Task DisconnectUserAsync(Guid userId)
+        {
+            try
+            {
+                var usertoUpdate = await context.Users.FirstOrDefaultAsync(item => item.Id == userId);
+
+                usertoUpdate.OnlineStatus= false;
+                usertoUpdate.LastActive= DateTime.Now;
+                 context.Users.Update(usertoUpdate);
+                 context.SaveChangesAsync();
+            }
+            catch(Exception ex) 
+            {
+                throw ex;
+            }
+        }
+    }
 
     
 

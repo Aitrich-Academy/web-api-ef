@@ -5,8 +5,10 @@
 		public Guid Id { get; set; }
 		public Guid JobId { get; set; }
 		public Guid CompanyId { get; set; }
-		//public string Post { get; set; }
-		public DateTime Date { get; set; }
+        public Guid JobseekerId { get; set; }
+        public Guid ApplicationId { get; set; }
+        //public string Post { get; set; }
+        public DateTime Date { get; set; }
 		public string Location { get; set; }
 		public string Time { get; set; }
 

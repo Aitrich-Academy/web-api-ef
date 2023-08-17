@@ -44,6 +44,10 @@ public partial class User
     public byte[]? Image { get; set; }
 
     public DateTime? CreatedDate { get; set; }
+    //message properties
+    public string? ConnectionId { get; set; }
+    public bool? OnlineStatus { get; set; } = false;
+    public DateTime? LastActive { get; set; }
 
     public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
 
@@ -60,4 +64,6 @@ public partial class User
     public virtual ICollection<Qualification> Qualifications { get; set; } = new List<Qualification>();
 
     public virtual ICollection<Skill> Skills { get; set; } = new List<Skill>();
+    public virtual ICollection<MessageGroup> MessageGroups { get; set; } = new List<MessageGroup>();
+    //public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
 }

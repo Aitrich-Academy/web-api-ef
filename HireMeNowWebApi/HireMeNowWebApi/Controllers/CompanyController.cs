@@ -91,6 +91,8 @@ namespace HireMeNowWebApi.Controllers
         }
 
         [HttpGet("/company/list")]
+        //[ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
+        //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> GetAllCompany([FromQuery] CompanyListParams param)
         {
 

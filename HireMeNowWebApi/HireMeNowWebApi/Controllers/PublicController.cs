@@ -3,6 +3,7 @@ using HireMeNowWebApi.Dtos;
 using HireMeNowWebApi.Exceptions;
 using HireMeNowWebApi.Interfaces;
 using HireMeNowWebApi.Models;
+using HireMeNowWebApi.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -64,5 +65,19 @@ namespace HireMeNowWebApi.Controllers
 			}
 			return Ok(_mapper.Map<UserDto>(user));
 		}
-	}
+
+        [HttpPost]
+        [Route("/user/getbyemail")]
+        public IActionResult GetUserByEmail(string email)
+        {
+            //var user = _mapper.Map<User>(userDto);
+            _userRepository.GetUserByEmail(email);
+            var user = _userRepository.GetUserByEmail(email);
+            if (user == null)
+            {
+                return BadRequest("Login Failed");
+            }
+            return Ok(_mapper.Map<UserDto>(user));
+        }
+    }
 }

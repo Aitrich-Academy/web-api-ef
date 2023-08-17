@@ -46,13 +46,9 @@ namespace HireMeNowWebApi.Controllers
         //    return Ok(_mapper.Map<UserDto>(user));
         //}
         [HttpGet("/account/profile")]
-
-		
 		public IActionResult GetProfile()
         {
-			//var currentUser = HttpContext.User;
-			//var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-		
+
             
             return Ok(_userService.GetCurrentUser());
         }

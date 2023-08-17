@@ -30,12 +30,6 @@ namespace HireMeNowWebApi.Controllers
 			_mapper = mapper;
 		}
 
-		public InterviewController(IMapper mapper, IInterviewServices @object)
-		{
-			_mapper = mapper;
-			this.@object = @object;
-		}
-
 		
 
 
