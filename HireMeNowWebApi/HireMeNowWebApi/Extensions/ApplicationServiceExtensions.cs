@@ -22,7 +22,7 @@ namespace HireMeNowWebApi.Extensions
 			);
 
 			services.AddScoped<IUserService, UserService>();
-			services.AddScoped<IUserRepository, UserRepository>();
+			services.AddScoped<IUserRepository, UserRepository>();	
 			services.AddScoped<IInterviewServices, InterviewServices>();
 			services.AddScoped<IInterviewRepository, InterviewRepository>();
 			services.AddScoped<IJobService, JobService>();
