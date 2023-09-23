@@ -19,7 +19,8 @@ namespace HireMeNowWebApi.Services
 			interviewRepository.removeInterview(id);
 		}
 
-		public async Task<PagedList<Interview>> sheduledInterviewList(InterviewParams param)
+		public async Task<PagedList<Interview>> sheduledInterviewList
+			(InterviewParams param)
 		{
 			return await interviewRepository.sheduledInterviewList(param);
 		}

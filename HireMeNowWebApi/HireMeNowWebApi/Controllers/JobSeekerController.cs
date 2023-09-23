@@ -30,8 +30,8 @@ namespace HireMeNowWebApi.Controllers
 			_mapper = mapper;
 		}
 		[HttpPost]
-	
-		public IActionResult ApplyJob(Guid jobId)
+        [Route("applyjob")]
+        public IActionResult ApplyJob(Guid jobId)
 		{
 			if (jobId != null)
 			{
